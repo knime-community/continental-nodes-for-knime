@@ -19,6 +19,6 @@ The source code provided here is typically not compiled by the user. We also do 
 License
 -------
 
-Copyright (c) 2023 Continental Corporation. All rights reserved.
+Forked from [Continental Github Repository](https://github.com/continental/continental-nodes-for-knime/)
 
 This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3, see the [LICENSE.txt](https://github.com/continental/continental-nodes-for-knime/blob/master/LICENSE.txt) file for details.

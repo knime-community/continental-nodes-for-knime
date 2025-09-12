@@ -67,7 +67,6 @@ public class FifoResolverNodeLogic {
 		
 		
 		DataType qtyNumberType = inputTable.getSpec().getColumnSpec(inputColumnNameQty).getType();
-		String qtyNumberTypeString = qtyNumberType.getName();
 		BufferedDataContainer outBuffer = exec.createDataContainer(
 				new DataTableSpec(
 						DataTableSpec.createColumnSpecs(
@@ -118,7 +117,7 @@ public class FifoResolverNodeLogic {
 							cells[0] = group == null ? new MissingCell("") : new StringCell(group);
 							cells[1] = new MissingCell("");
 							cells[2] = new StringCell(rowId);
-							cells[3] = generateCell(-qty, qtyNumberTypeString);
+							cells[3] = generateCell(-qty, qtyNumberType);
 							outBuffer.addRowToTable(new DefaultRow(new RowKey("PHANTOM_" + rowId), cells));
 							qty = 0.0;
 						}
@@ -139,7 +138,7 @@ public class FifoResolverNodeLogic {
 						cells[0] = group == null ? new MissingCell("") : new StringCell(group);
 						cells[1] = new StringCell(inputRowId);
 						cells[2] = new StringCell(rowId);
-						cells[3] = generateCell(outputQty, qtyNumberTypeString);
+						cells[3] = generateCell(outputQty, qtyNumberType);
 						outBuffer.addRowToTable(new DefaultRow(new RowKey(inputRowId + "_" + rowId), cells));
 					}
 				}
@@ -160,7 +159,7 @@ public class FifoResolverNodeLogic {
 				cells[0] = group == null ? new MissingCell("") : new StringCell(group);
 				cells[1] = new StringCell(entry.getKey());
 				cells[2] = new MissingCell("");
-				cells[3] = generateCell(entry.getValue(), qtyNumberTypeString);
+				cells[3] = generateCell(entry.getValue(), qtyNumberType);
 				outBuffer.addRowToTable(new DefaultRow(new RowKey(entry.getKey() + " (residual)"), cells));
 			}
 		}
@@ -203,13 +202,12 @@ public class FifoResolverNodeLogic {
 		}
 	}
 	
-	private static DataCell generateCell(double value, String targetTypeName) {
-		switch (targetTypeName) {
-		case "Number (long)":
+	private static DataCell generateCell(double value, DataType targetType) {
+		if (LongCell.TYPE.equals(targetType)) {
 			return new LongCell((long)(value+0.4));
-		case "Number (integer)":
+		} else if (IntCell.TYPE.equals(targetType)) {
 			return new IntCell((int)(value+0.4));
-		default:
+		} else {
 			return new DoubleCell(value);
 		}
 	}

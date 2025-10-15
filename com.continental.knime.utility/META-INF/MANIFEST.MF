@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Continental Nodes for KNIME
+Bundle-Name: XLS Formatting & Utilities
 Bundle-SymbolicName: com.continental.knime.utility;singleton:=true
 Bundle-Version: 1.5.2.qualifier
 Bundle-ClassPath: utility.jar

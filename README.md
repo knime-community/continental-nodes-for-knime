@@ -19,6 +19,6 @@ The source code provided here is typically not compiled by the user. We also do 
 License
 -------
 
-Forked from [Continental Github Repository](https://github.com/continental/continental-nodes-for-knime/)
+Forked from [Continental Github Repository](https://github.com/continental/continental-nodes-for-knime/). This repository is now maintained by [KNIME Team Rakete](mailto:team-rakete@knime.com).
 
 This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3, see the [LICENSE.txt](https://github.com/continental/continental-nodes-for-knime/blob/master/LICENSE.txt) file for details.

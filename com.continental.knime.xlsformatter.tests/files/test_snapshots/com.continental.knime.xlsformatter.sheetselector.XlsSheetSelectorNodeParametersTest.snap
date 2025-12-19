@@ -1,0 +1,85 @@
+{
+  "data" : {
+    "model" : {
+      "sheetSelectionMode" : "FIRST_SHEET",
+      "sheetName" : "Table 1"
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "sheetName" : {
+            "type" : "string",
+            "title" : "Sheet name",
+            "description" : "The name of the XLS sheet that you want further instructions to be applied on.",
+            "default" : "Table 1"
+          },
+          "sheetSelectionMode" : {
+            "oneOf" : [ {
+              "const" : "BY_NAME",
+              "title" : "By name"
+            }, {
+              "const" : "FIRST_SHEET",
+              "title" : "First sheet"
+            } ],
+            "title" : "Sheet selection",
+            "description" : "Select either the first sheet (as if this node would be omitted) or specify the name of the sheet to apply\nfurther instructions on.\n",
+            "default" : "FIRST_SHEET"
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/sheetSelectionMode",
+      "options" : {
+        "format" : "valueSwitch"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/sheetName",
+      "options" : {
+        "validation" : {
+          "pattern" : {
+            "errorMessage" : "The field cannot be blank (it must contain at least one non-whitespace character).",
+            "parameters" : {
+              "pattern" : ".*\\S.*"
+            }
+          }
+        }
+      },
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/sheetSelectionMode",
+          "schema" : {
+            "oneOf" : [ {
+              "const" : "BY_NAME"
+            } ]
+          }
+        }
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "sheetSelectionMode" : {
+            "configPaths" : [ [ "OptionNamed" ] ]
+          },
+          "sheetName" : {
+            "configKey" : "SheetName"
+          }
+        }
+      }
+    }
+  }
+}

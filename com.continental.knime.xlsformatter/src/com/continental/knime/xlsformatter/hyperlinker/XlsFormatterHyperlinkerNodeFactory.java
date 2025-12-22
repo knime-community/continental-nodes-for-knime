@@ -54,7 +54,7 @@ public class XlsFormatterHyperlinkerNodeFactory extends NodeFactory<XlsFormatter
 	 */
 	@Override
 	public boolean hasDialog() {
-		return true;
+		return false;
 	}
 
 	/**
@@ -62,6 +62,6 @@ public class XlsFormatterHyperlinkerNodeFactory extends NodeFactory<XlsFormatter
 	 */
 	@Override
 	public NodeDialogPane createNodeDialogPane() {
-		return new XlsFormatterHyperlinkerNodeDialog();
+		return null;
 	}
 }

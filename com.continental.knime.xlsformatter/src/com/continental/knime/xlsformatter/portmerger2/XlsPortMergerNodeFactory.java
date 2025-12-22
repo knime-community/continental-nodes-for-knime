@@ -62,7 +62,7 @@ public class XlsPortMergerNodeFactory extends ConfigurableNodeFactory<XlsPortMer
 	 */
 	@Override
 	public boolean hasDialog() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -83,6 +83,6 @@ public class XlsPortMergerNodeFactory extends ConfigurableNodeFactory<XlsPortMer
 
 	@Override
 	protected NodeDialogPane createNodeDialogPane(NodeCreationConfiguration creationConfig) {
-		return new XlsPortMergerNodeDialog();
+		return null;
 	}
 }

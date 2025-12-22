@@ -175,11 +175,11 @@ public class NetworkComponentSplitterNodeModel extends NodeModel {
 	protected void validateSettings(final NodeSettingsRO settings)
 			throws InvalidSettingsException {
 
-		m_inputColumnName1.validateSettings(settings);
-		m_inputColumnName2.validateSettings(settings);
-		m_missingValueAllowedAsOwnNode.validateSettings(settings);
-		m_outputColumnNameNode.validateSettings(settings);
-		m_outputColumnNameCluster.validateSettings(settings);
+		m_inputColumnName1.loadSettingsFrom(settings);
+		m_inputColumnName2.loadSettingsFrom(settings);
+		m_missingValueAllowedAsOwnNode.loadSettingsFrom(settings);
+		m_outputColumnNameNode.loadSettingsFrom(settings);
+		m_outputColumnNameCluster.loadSettingsFrom(settings);
 
 		if (m_inputColumnName1.getStringValue().equals(m_inputColumnName2.getStringValue()))
 			throw new InvalidSettingsException("Two different input columns need to be selected.");

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: XLS Formatting & Utilities
 Bundle-SymbolicName: com.continental.knime.utility;singleton:=true
-Bundle-Version: 1.6.0.qualifier
+Bundle-Version: 1.7.0.qualifier
 Bundle-ClassPath: utility.jar
 Bundle-Activator: com.continental.knime.utility.networkcomponentsplitter.NetworkComponentSplitterNodePlugin
 Bundle-Vendor: Continental
@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.knime.workbench.repository;bundle-version="[5.3.0,6.0.0)",
  org.knime.base;bundle-version="[5.3.0,6.0.0)",
  org.knime.core.util;bundle-version="[6.0.0,7.0.0)",
- org.knime.product;bundle-version="[5.3.0,6.0.0)"
+ org.knime.product;bundle-version="[5.3.0,6.0.0)",
+ org.knime.core.ui;bundle-version="[5.10.0,6.0.0)"
 Bundle-ActivationPolicy: lazy
 Export-Package: com.continental.knime.utility.networkcomponentsplitter
 Bundle-RequiredExecutionEnvironment: JavaSE-17

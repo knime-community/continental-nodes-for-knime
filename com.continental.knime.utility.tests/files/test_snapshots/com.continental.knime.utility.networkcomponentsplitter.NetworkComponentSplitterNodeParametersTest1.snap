@@ -1,0 +1,202 @@
+{
+  "data" : {
+    "model" : {
+      "inputColumn1" : "Cluster Membership",
+      "inputColumn2" : "New column",
+      "missingValueAllowedAsOwnNode" : true,
+      "outputColumnNameNode" : "Node",
+      "outputColumnNameCluster" : "Cluster"
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn1" : {
+            "type" : "string",
+            "title" : "Select node1 column",
+            "description" : "The input table's String-typed column holding the name of the first node that represents an edge in the\nnetwork.\n"
+          },
+          "inputColumn2" : {
+            "type" : "string",
+            "title" : "Select node2 column",
+            "description" : "The input table's String-typed column holding the name of the second node that represents an edge in the\nnetwork.\n"
+          },
+          "missingValueAllowedAsOwnNode" : {
+            "type" : "boolean",
+            "title" : "Handle missing value as node",
+            "description" : "If checked, the missing value is treated as a valid node name and will appear as a node in the output\ntable. If unchecked, missing values are resolved by (1) ignoring edges of both missing values and (2)\ntreating edges between a valid String and a missing value as self-relation of the valid String node. Hence,\n if unchecked, missing value will not appear in the output table.\n",
+            "default" : true
+          },
+          "outputColumnNameCluster" : {
+            "type" : "string",
+            "title" : "ClusterID column name",
+            "description" : "Name of the output table's second column, assigning a cluster ID to every node name.",
+            "default" : "Cluster"
+          },
+          "outputColumnNameNode" : {
+            "type" : "string",
+            "title" : "Nodelist column name",
+            "description" : "Name of the output table's first column, containing node names originating from both columns of the input\ntable.\n",
+            "default" : "Node"
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn1",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inputColumn2",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ],
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    }, {
+      "label" : "Missing Value Handling",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/missingValueAllowedAsOwnNode",
+        "options" : {
+          "format" : "checkbox"
+        }
+      } ]
+    }, {
+      "label" : "Output Column Names",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/outputColumnNameNode",
+        "options" : {
+          "validation" : {
+            "pattern" : {
+              "errorMessage" : "The field cannot be blank (it must contain at least one non-whitespace character).",
+              "parameters" : {
+                "pattern" : ".*\\S.*"
+              }
+            }
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/outputColumnNameCluster",
+        "options" : {
+          "validation" : {
+            "pattern" : {
+              "errorMessage" : "The field cannot be blank (it must contain at least one non-whitespace character).",
+              "parameters" : {
+                "pattern" : ".*\\S.*"
+              }
+            }
+          }
+        }
+      } ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "inputColumn1" : {
+            "configPaths" : [ [ "columnName" ] ],
+            "route" : [ "InputCol1" ]
+          },
+          "inputColumn2" : {
+            "configPaths" : [ [ "columnName" ] ],
+            "route" : [ "InputCol2" ]
+          },
+          "missingValueAllowedAsOwnNode" : {
+            "configKey" : "MissingAsOwnNode"
+          },
+          "outputColumnNameNode" : {
+            "configKey" : "OutputColNode"
+          },
+          "outputColumnNameCluster" : {
+            "configKey" : "OutputColCluster"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/inputColumn1",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Cluster Membership",
+        "text" : "Cluster Membership",
+        "type" : {
+          "id" : "org.knime.core.data.StringValue",
+          "text" : "String"
+        }
+      }, {
+        "id" : "New column",
+        "text" : "New column",
+        "type" : {
+          "id" : "org.knime.core.data.StringValue",
+          "text" : "String"
+        }
+      }, {
+        "id" : "Other String Column",
+        "text" : "Other String Column",
+        "type" : {
+          "id" : "org.knime.core.data.StringValue",
+          "text" : "String"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/inputColumn2",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Cluster Membership",
+        "text" : "Cluster Membership",
+        "type" : {
+          "id" : "org.knime.core.data.StringValue",
+          "text" : "String"
+        }
+      }, {
+        "id" : "New column",
+        "text" : "New column",
+        "type" : {
+          "id" : "org.knime.core.data.StringValue",
+          "text" : "String"
+        }
+      }, {
+        "id" : "Other String Column",
+        "text" : "Other String Column",
+        "type" : {
+          "id" : "org.knime.core.data.StringValue",
+          "text" : "String"
+        }
+      } ]
+    } ]
+  } ]
+}

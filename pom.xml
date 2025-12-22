@@ -24,6 +24,7 @@
 		<module>com.continental.knime.xlsformatter</module>
 		<module>com.continental.knime.xlsformatter.tests</module>
 		<module>com.continental.knime.utility</module>
+		<module>com.continental.knime.utility.tests</module>
 		<module>com.continental.knime.feature</module>
 		<module>com.continental.knime.update</module>
 	</modules>

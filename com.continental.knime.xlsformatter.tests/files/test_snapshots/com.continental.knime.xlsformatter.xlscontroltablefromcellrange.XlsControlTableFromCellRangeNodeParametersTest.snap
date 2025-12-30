@@ -1,0 +1,113 @@
+{
+  "data" : {
+    "model" : {
+      "performTagValiation" : true,
+      "cellRange" : "A1:B2",
+      "tag" : "header",
+      "combineMode" : "APPEND"
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "cellRange" : {
+            "type" : "string",
+            "title" : "Cell range",
+            "description" : "Cell range in XLS format (e.g. A2 or A2:B10) for which the tag should be created. Also supports\nthe numeric column addressing format of R1C1 or R1C1:R2C2 where 'R' is the row number and 'C' the\ncolumn number.\n",
+            "default" : "A1:B2"
+          },
+          "combineMode" : {
+            "oneOf" : [ {
+              "const" : "APPEND",
+              "title" : "Append"
+            }, {
+              "const" : "OVERWRITE",
+              "title" : "Overwrite"
+            } ],
+            "title" : "Tag combination mode",
+            "description" : "If the optional control table input is used, you can either overwrite or append the tag for\noverlapping cells.\n",
+            "default" : "APPEND"
+          },
+          "performTagValiation" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "tag" : {
+            "type" : "string",
+            "title" : "Tag to set in control table",
+            "description" : "Tag that shall be set for the cells of your range specified before.",
+            "default" : "header"
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/cellRange"
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/tag",
+      "providedOptions" : [ "validation.pattern" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/combineMode",
+      "options" : {
+        "format" : "valueSwitch"
+      },
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "performTagValiation" : {
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "cellRange" : {
+            "configKey" : "CellRange"
+          },
+          "tag" : {
+            "configKey" : "Tag"
+          },
+          "combineMode" : {
+            "configPaths" : [ [ "Mode" ] ]
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/performTagValiation",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : true
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "id" : "after-open-dialog"
+    },
+    "triggerInitially" : true,
+    "dependencies" : [ "#/properties/model/properties/tag" ]
+  }, {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/tag"
+    },
+    "dependencies" : [ "#/properties/model/properties/tag" ]
+  } ]
+}

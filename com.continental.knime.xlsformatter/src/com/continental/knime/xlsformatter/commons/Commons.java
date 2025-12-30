@@ -21,6 +21,19 @@ package com.continental.knime.xlsformatter.commons;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+import org.knime.core.node.InvalidSettingsException;
+import org.knime.core.node.NodeSettingsRO;
+import org.knime.core.node.NodeSettingsWO;
+import org.knime.node.parameters.persistence.NodeParametersPersistor;
+import org.knime.node.parameters.widget.choices.Label;
+
+import com.continental.knime.xlsformatter.commons.Commons.Modes;
+import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil;
+import com.continental.knime.xlsformatter.xlscontroltablegenerator.XlsControlTableGeneratorNodeModel.InconsistencyResolutionOptions;
+import com.continental.knime.xlsformatter.xlscontroltablemerger.XlsControlTableMergerNodeModel;
 
 public class Commons {
 
@@ -75,10 +88,13 @@ public class Commons {
 	 * Modes of how to add two tables.
 	 */
 	public static enum Modes {
-  	APPEND,
-  	OVERWRITE;
-  	
-  	@Override
+		
+		@Label(value = "Append")
+		APPEND, //
+		@Label(value = "Overwrite")
+		OVERWRITE;
+
+		@Override
 		public String toString() {
 			switch (this) {
 			case APPEND:
@@ -89,9 +105,60 @@ public class Commons {
 				throw new IllegalArgumentException();
 			}
 		}
-		
+
 		public static Modes getFromString(String value) {
-	    return XlsFormatterUiOptions.getEnumEntryFromString(Modes.values(), value);
-		}	
-  }
+			return XlsFormatterUiOptions.getEnumEntryFromString(Modes.values(), value);
+		}
+
+		/**
+		 * Get enum entry from its String value.
+		 * 
+		 * @param value The String value.
+		 * @return The enum entry.
+		 * @throws InvalidSettingsException If no enum entry could be found for the given String value.
+		 * @since 1.7
+		 */
+		public static Modes getFromValue(final String value) throws InvalidSettingsException {
+			for (final Modes mode : values()) {
+				if (mode.toString().equals(value)) {
+					return mode;
+				}
+			}
+			throw new InvalidSettingsException(XlsFormatterNodeParameterUtil.createInvalidEnumValueExceptionMessage(
+					Modes.class, e -> e.toString(), value));
+		}
+		
+	}
+	
+	/**
+	 * Persistor for merge mode.
+	 */
+    public static abstract class ModePersistor implements NodeParametersPersistor<Modes> {
+    	
+    	private String m_configKey;
+    	
+    	private String m_defaultMode;
+    	
+    	protected ModePersistor(final String configKey, final String defaultMode) {
+			m_configKey = configKey;
+			m_defaultMode = defaultMode;
+    	}
+
+        @Override
+        public Modes load(NodeSettingsRO settings) throws InvalidSettingsException {
+            return Modes.getFromValue(settings.getString(m_configKey, m_defaultMode));
+        }
+
+        @Override
+        public void save(Modes obj, NodeSettingsWO settings) {
+            settings.addString(m_configKey, obj.toString());
+        }
+
+        @Override
+        public String[][] getConfigPaths() {
+            return new String[][]{{m_configKey}};
+        }
+        
+    }
+	
 }

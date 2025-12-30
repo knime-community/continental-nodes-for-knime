@@ -1,0 +1,51 @@
+{
+  "data" : {
+    "model" : {
+      "mergeMode" : "APPEND"
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "mergeMode" : {
+            "oneOf" : [ {
+              "const" : "APPEND",
+              "title" : "Append"
+            }, {
+              "const" : "OVERWRITE",
+              "title" : "Overwrite"
+            } ],
+            "title" : "Tag combination mode",
+            "description" : "Either append all tags, or overwrite the information from the first control table\nby that of the second one in case of conflict.\n",
+            "default" : "APPEND"
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/mergeMode",
+      "options" : {
+        "format" : "valueSwitch"
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "mergeMode" : {
+            "configPaths" : [ [ "Mode" ] ]
+          }
+        }
+      }
+    }
+  }
+}

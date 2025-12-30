@@ -44,14 +44,17 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellReference;
+import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.port.PortObject;
 import org.knime.core.node.port.PortObjectSpec;
 import org.knime.core.node.port.PortType;
 import org.knime.core.node.port.PortTypeRegistry;
+import org.knime.node.parameters.widget.choices.Label;
 
 import com.continental.knime.xlsformatter.apply.XlsFormatterApplyLogic;
 import com.continental.knime.xlsformatter.commons.ColorTools;
 import com.continental.knime.xlsformatter.commons.Commons;
+import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil;
 
 // NOTE: changes to the state class (e.g. new fields) must also be reflected in XlsFormatterStateMerger
 
@@ -77,12 +80,32 @@ public class XlsFormatterState implements PortObject, Externalizable {
 	/**
 	 * Formatting options of a cell's horizontal alignment.
 	 */
-	public enum CellAlignmentHorizontal { UNMODIFIED, LEFT, CENTER, RIGHT, JUSTIFY }
+	public enum CellAlignmentHorizontal { 
+		@Label("Unmodified")
+		UNMODIFIED, 
+		@Label("Left")
+		LEFT, 
+		@Label("Center")
+		CENTER, 
+		@Label("Right")
+		RIGHT, 
+		@Label("Justify")
+		JUSTIFY;
+	}
 	
 	/**
 	 * Formatting options of a cell's vertical alignment.
 	 */
-	public enum CellAlignmentVertical { UNMODIFIED, TOP, MIDDLE, BOTTOM }
+	public enum CellAlignmentVertical { 
+		@Label("Unmodified")
+		UNMODIFIED, 
+		@Label("Top")
+		TOP, 
+		@Label("Middle")		
+		MIDDLE, 
+		@Label("Bottom")
+		BOTTOM;
+	}
 	
 	/**
 	 * Formatting style options of a border's edge.
@@ -99,26 +122,30 @@ public class XlsFormatterState implements PortObject, Externalizable {
 	 * definition in case of date/time).
 	 */
 	public enum CellDataType {
-		UNMODIFIED,
-		NUMERIC,
-		BOOLEAN,
-		FORMULA,
-		LOCALDATE,
-		LOCALDATETIME,
-		LOCALTIME;
+		@Label("Unmodified")
+		UNMODIFIED("unmodified"),
+		@Label("Numeric")
+		NUMERIC("numeric"),
+		@Label("Boolean")
+		BOOLEAN("boolean"),
+		@Label("Formula")
+		FORMULA("formula"),
+		@Label("Local date")
+		LOCALDATE("local date"),
+		@Label("Local date/time")
+		LOCALDATETIME("local date/time"),
+		@Label("Local time")
+		LOCALTIME("local time");
+		
+		private String m_value;
+		
+		CellDataType(String value) {
+			m_value = value;
+		}
 		
 		@Override
 		public String toString() {
-			switch (this) {
-			case LOCALDATE:
-				return "local date";
-			case LOCALDATETIME:
-				return "local date/time";
-			case LOCALTIME:
-				return "local time";
-			default:
-				return super.toString().toLowerCase();
-			}
+			return m_value;
 		}
 		
 		/**
@@ -153,6 +180,25 @@ public class XlsFormatterState implements PortObject, Externalizable {
 				throw new IllegalArgumentException("getDateTextFormats() can be called on date/time types only.");
 			}
 		}
+		
+		/**
+		 * Get enum entry from its String value.
+		 * 
+		 * @param value The String value.
+		 * @return The enum entry.
+		 * @throws InvalidSettingsException If no enum entry could be found for the given String value.
+		 * @since 1.7
+		 */
+		public static CellDataType getFromValue(final String value) throws InvalidSettingsException {
+            for (final CellDataType rotation : values()) {
+                if (rotation.toString().equals(value)) {
+                    return rotation;
+                }
+            }
+            throw new InvalidSettingsException(XlsFormatterNodeParameterUtil.createInvalidEnumValueExceptionMessage(
+            		CellDataType.class, e -> e.toString(), value));
+        }
+		
 	}
 	
 	/**

@@ -1,0 +1,322 @@
+{
+  "data" : {
+    "model" : {
+      "performTagValiation" : true,
+      "tag" : "header",
+      "horizontalAlignment" : "UNMODIFIED",
+      "verticalAlignment" : "UNMODIFIED",
+      "textRotationAngle" : "UNMODIFIED",
+      "wordWrap" : false,
+      "cellStyle" : "UNMODIFIED",
+      "textFormat" : "",
+      "textPresets" : "UNMODIFIED"
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "cellStyle" : {
+            "oneOf" : [ {
+              "const" : "UNMODIFIED",
+              "title" : "Unmodified"
+            }, {
+              "const" : "NUMERIC",
+              "title" : "Numeric"
+            }, {
+              "const" : "BOOLEAN",
+              "title" : "Boolean"
+            }, {
+              "const" : "FORMULA",
+              "title" : "Formula"
+            }, {
+              "const" : "LOCALDATE",
+              "title" : "Local date"
+            }, {
+              "const" : "LOCALDATETIME",
+              "title" : "Local date/time"
+            }, {
+              "const" : "LOCALTIME",
+              "title" : "Local time"
+            } ],
+            "title" : "Cell style conversion",
+            "description" : "Define the data type conversion for the cell content.",
+            "default" : "UNMODIFIED"
+          },
+          "horizontalAlignment" : {
+            "oneOf" : [ {
+              "const" : "UNMODIFIED",
+              "title" : "Unmodified"
+            }, {
+              "const" : "LEFT",
+              "title" : "Left"
+            }, {
+              "const" : "CENTER",
+              "title" : "Center"
+            }, {
+              "const" : "RIGHT",
+              "title" : "Right"
+            }, {
+              "const" : "JUSTIFY",
+              "title" : "Justify"
+            } ],
+            "title" : "Horizontal alignment",
+            "description" : "Pick the horizontal alignment of your text in the respective cell (e.g. left, center, right).\n",
+            "default" : "UNMODIFIED"
+          },
+          "performTagValiation" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "tag" : {
+            "type" : "string",
+            "title" : "Applies to tag (single tag only)",
+            "description" : "Tag in your input table for which the formatting of this node should be applied to.\n",
+            "default" : "header"
+          },
+          "textFormat" : {
+            "type" : "string",
+            "title" : "Text format",
+            "description" : "Define the text format of your cell (e.g. percent: 0.00% , whole number: #,##0, ...). Please use only\nEnglish locale values, irrespective of your target or local environment.\n",
+            "default" : ""
+          },
+          "textPresets" : {
+            "oneOf" : [ {
+              "const" : "UNMODIFIED",
+              "title" : "[Select preset text format]"
+            }, {
+              "const" : "PERCENT",
+              "title" : "Percent: 0.00 %"
+            }, {
+              "const" : "INTEGER",
+              "title" : "Integer: 0"
+            }, {
+              "const" : "THOUSANDSEPARATED",
+              "title" : "Thousand separated: #,##0"
+            }, {
+              "const" : "FINANCIAL",
+              "title" : "Financial: #,##0.00;[Red](#,##0.00)"
+            }, {
+              "const" : "DATE",
+              "title" : "Date: yyyy-MM-dd"
+            }, {
+              "const" : "DATETIME",
+              "title" : "Date/time: yyyy-MM-dd hh:mm:ss"
+            } ],
+            "default" : "UNMODIFIED"
+          },
+          "textRotationAngle" : {
+            "oneOf" : [ {
+              "const" : "UNMODIFIED",
+              "title" : "Unmodified"
+            }, {
+              "const" : "PLUS_90",
+              "title" : "+90°"
+            }, {
+              "const" : "PLUS_45",
+              "title" : "+45°"
+            }, {
+              "const" : "ZERO",
+              "title" : "0°"
+            }, {
+              "const" : "MINUS_45",
+              "title" : "-45°"
+            }, {
+              "const" : "MINUS_90",
+              "title" : "-90°"
+            } ],
+            "title" : "Text rotation angle",
+            "description" : "Set the angle by which your text in the cell should be rotated.",
+            "default" : "UNMODIFIED"
+          },
+          "verticalAlignment" : {
+            "oneOf" : [ {
+              "const" : "UNMODIFIED",
+              "title" : "Unmodified"
+            }, {
+              "const" : "TOP",
+              "title" : "Top"
+            }, {
+              "const" : "MIDDLE",
+              "title" : "Middle"
+            }, {
+              "const" : "BOTTOM",
+              "title" : "Bottom"
+            } ],
+            "title" : "Vertical alignment",
+            "description" : "Pick the vertical alignment of your text in the respective cell (e.g. top, middle, bottom).\n",
+            "default" : "UNMODIFIED"
+          },
+          "wordWrap" : {
+            "type" : "boolean",
+            "title" : "Word wrap",
+            "description" : "Select whether long text shall be wrapped to new lines within cells.\n",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "label" : "Tag Selection",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/tag",
+        "providedOptions" : [ "validation.pattern" ]
+      } ]
+    }, {
+      "label" : "Text Position and Layout",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/horizontalAlignment"
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/verticalAlignment"
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/textRotationAngle"
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/wordWrap",
+        "options" : {
+          "format" : "checkbox"
+        }
+      } ]
+    }, {
+      "label" : "Data Type and Format",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/cellStyle",
+        "options" : {
+          "format" : "dropDown"
+        },
+        "providedOptions" : [ "possibleValues" ]
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/textFormat",
+        "options" : {
+          "format" : "dropDown",
+          "allowNewValue" : true
+        },
+        "providedOptions" : [ "possibleValues" ]
+      } ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "performTagValiation" : {
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "tag" : {
+            "configKey" : "Tag"
+          },
+          "horizontalAlignment" : {
+            "configPaths" : [ [ "HorizontalAlignment" ] ]
+          },
+          "verticalAlignment" : {
+            "configPaths" : [ [ "VerticalAlignment" ] ]
+          },
+          "textRotationAngle" : {
+            "configPaths" : [ [ "TextRotation" ] ]
+          },
+          "wordWrap" : {
+            "configKey" : "WordWrap"
+          },
+          "cellStyle" : {
+            "configPaths" : [ [ "CellStyle" ] ]
+          },
+          "textFormat" : {
+            "configKey" : "TextFormat"
+          },
+          "textPresets" : {
+            "configPaths" : [ ]
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/cellStyle",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "UNMODIFIED",
+        "text" : "Unmodified"
+      }, {
+        "id" : "NUMERIC",
+        "text" : "Numeric"
+      }, {
+        "id" : "BOOLEAN",
+        "text" : "Boolean"
+      }, {
+        "id" : "LOCALDATE",
+        "text" : "Local date"
+      }, {
+        "id" : "LOCALDATETIME",
+        "text" : "Local date/time"
+      }, {
+        "id" : "LOCALTIME",
+        "text" : "Local time"
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/performTagValiation",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : true
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/textFormat",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "",
+        "text" : ""
+      }, {
+        "id" : "0.00 %",
+        "text" : "0.00 %"
+      }, {
+        "id" : "0",
+        "text" : "0"
+      }, {
+        "id" : "#,##0",
+        "text" : "#,##0"
+      }, {
+        "id" : "#,##0.00;[Red](#,##0.00)",
+        "text" : "#,##0.00;[Red](#,##0.00)"
+      }, {
+        "id" : "yyyy-MM-dd",
+        "text" : "yyyy-MM-dd"
+      }, {
+        "id" : "yyyy-MM-dd hh:mm:ss",
+        "text" : "yyyy-MM-dd hh:mm:ss"
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "id" : "after-open-dialog"
+    },
+    "triggerInitially" : true,
+    "dependencies" : [ "#/properties/model/properties/tag" ]
+  }, {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/tag"
+    },
+    "dependencies" : [ "#/properties/model/properties/tag" ]
+  } ]
+}

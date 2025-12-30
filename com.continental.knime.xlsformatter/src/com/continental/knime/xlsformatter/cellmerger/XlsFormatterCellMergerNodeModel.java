@@ -43,10 +43,12 @@ import org.knime.core.node.port.PortType;
 
 import com.continental.knime.xlsformatter.commons.AddressingTools;
 import com.continental.knime.xlsformatter.commons.TagBasedXlsCellFormatterNodeModel;
+import com.continental.knime.xlsformatter.commons.UiValidation;
 import com.continental.knime.xlsformatter.commons.WarningMessageContainer;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableAnalysisTools;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableValidator;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableValidator.ControlTableType;
+import com.continental.knime.xlsformatter.commons.XlsFormatterTagTools;
 import com.continental.knime.xlsformatter.porttype.XlsFormatterState;
 import com.continental.knime.xlsformatter.porttype.XlsFormatterState.CellState;
 import com.continental.knime.xlsformatter.porttype.XlsFormatterStateSpec;
@@ -178,7 +180,7 @@ public class XlsFormatterCellMergerNodeModel extends TagBasedXlsCellFormatterNod
 
 		m_tag.loadSettingsFrom(settings);
 		m_allTags.loadSettingsFrom(settings);
-
+		
 	}
 
 	/**
@@ -190,6 +192,10 @@ public class XlsFormatterCellMergerNodeModel extends TagBasedXlsCellFormatterNod
 
 		m_tag.validateSettings(settings);
 		m_allTags.validateSettings(settings);
+		
+		if (settings.getBoolean("performTagValiation", false)) {
+			UiValidation.validateTagString(settings.getString(CFGKEY_TAGSTRING));
+	    }
 
 	}
 

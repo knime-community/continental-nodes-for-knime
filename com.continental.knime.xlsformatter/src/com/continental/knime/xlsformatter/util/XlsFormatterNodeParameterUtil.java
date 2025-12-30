@@ -1,8 +1,15 @@
 package com.continental.knime.xlsformatter.util;
 
+import java.util.Arrays;
+import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
+import org.knime.core.node.InvalidSettingsException;
+import org.knime.core.node.NodeSettingsRO;
+import org.knime.core.node.NodeSettingsWO;
 import org.knime.node.parameters.NodeParametersInput;
+import org.knime.node.parameters.persistence.NodeParametersPersistor;
 import org.knime.node.parameters.updates.ParameterReference;
 import org.knime.node.parameters.updates.StateProvider;
 import org.knime.node.parameters.widget.text.TextInputWidgetValidation;
@@ -73,5 +80,64 @@ public final class XlsFormatterNodeParameterUtil {
 		}
 
 	}
+	
+	/**
+	 * Persistor for enums that are defined in upper case but stored in lower case strings.
+	 * 
+	 * @param <E> the enum type
+	 */
+	public static class UpperLowerCaseEnumFieldPersistor<E extends Enum<E>> implements NodeParametersPersistor<E> {
+
+	    private final String m_configKey;
+
+	    private final Class<E> m_enumClass;
+
+	    /**
+	     * @param configKey under which the string is to be stored
+	     * @param enumClass the class of the to be persisted enum
+	     */
+	    protected UpperLowerCaseEnumFieldPersistor(final String configKey, final Class<E> enumClass) {
+	        m_enumClass = enumClass;
+	        m_configKey = configKey;
+	    }
+	    
+	    @Override
+	    public E load(final NodeSettingsRO settings) throws InvalidSettingsException {
+	        var name = settings.getString(m_configKey);
+	        try {
+	            return Enum.valueOf(m_enumClass, name.toUpperCase());
+	        } catch (IllegalArgumentException ex) {
+	            throw new InvalidSettingsException(
+	            		createInvalidEnumValueExceptionMessage(m_enumClass, e -> e.toString().toLowerCase(), name), ex);
+	        }
+	    }
+
+	    @Override
+	    public void save(final E obj, final NodeSettingsWO settings) {
+	        settings.addString(m_configKey, obj.toString().toLowerCase());
+	    }
+
+		@Override
+		public String[][] getConfigPaths() {
+			return new String[][]{{m_configKey}};
+		}
+		
+	}
+	
+	/**
+	 * Creates an exception message for invalid enum values.
+	 * 
+	 * @param <E> the enum type
+	 * @param enumClass the class of the enum
+	 * @param getStringRepresentation function to get the necessary string representation of the enum values
+	 * @param name the invalid name
+	 * @return the exception message
+	 */
+	public static <E extends Enum<E>> String createInvalidEnumValueExceptionMessage(final Class<E> enumClass, 
+	    final Function<E, String> getStringRepresentation, final String name) {
+        var values = Arrays.stream(enumClass.getEnumConstants())
+        		.map(getStringRepresentation).collect(Collectors.joining(", "));
+        return String.format("Invalid value '%s'. Possible values: %s", name, values);
+    }
 	
 }

@@ -20,7 +20,9 @@ package com.continental.knime.xlsformatter.cellformatter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.poi.ss.util.CellAddress;
 import org.knime.core.data.DataTableSpec;
@@ -37,9 +39,11 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.port.PortObject;
 import org.knime.core.node.port.PortObjectSpec;
 import org.knime.core.node.port.PortType;
+import org.knime.node.parameters.widget.choices.Label;
 
 import com.continental.knime.xlsformatter.commons.AddressingTools;
 import com.continental.knime.xlsformatter.commons.TagBasedXlsCellFormatterNodeModel;
+import com.continental.knime.xlsformatter.commons.UiValidation;
 import com.continental.knime.xlsformatter.commons.WarningMessageContainer;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableAnalysisTools;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableValidator;
@@ -49,6 +53,7 @@ import com.continental.knime.xlsformatter.commons.XlsFormattingStateValidator.Va
 import com.continental.knime.xlsformatter.porttype.XlsFormatterState;
 import com.continental.knime.xlsformatter.porttype.XlsFormatterState.FormattingFlag;
 import com.continental.knime.xlsformatter.porttype.XlsFormatterStateSpec;
+import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil;
 
 public class XlsFormatterCellFormatterNodeModel extends TagBasedXlsCellFormatterNodeModel {
 
@@ -97,34 +102,30 @@ public class XlsFormatterCellFormatterNodeModel extends TagBasedXlsCellFormatter
 	 * referenced elsewhere (except unmodified), e.g. in the dialog implementation.
 	 */
 	public enum TextPresets {
-		UNMODIFIED,
-		PERCENT,
-		INTEGER,
-		THOUSANDSEPARATED,
-		FINANCIAL,
-		DATE,
-		DATETIME;
+		@Label("[Select preset text format]")
+		UNMODIFIED("[select preset text format]"),
+		@Label("Percent: 0.00 %")
+		PERCENT("percent: 0.00 %"),
+		@Label("Integer: 0")
+		INTEGER("integer: 0"),
+		@Label("Thousand separated: #,##0")
+		THOUSANDSEPARATED("thousand separated: #,##0"),
+		@Label("Financial: #,##0.00;[Red](#,##0.00)")
+		FINANCIAL("financial: #,##0.00;[Red](#,##0.00)"),
+		@Label("Date: yyyy-MM-dd")
+		DATE("date: yyyy-MM-dd"),
+		@Label("Date/time: yyyy-MM-dd hh:mm:ss")
+		DATETIME("date/time: yyyy-MM-dd hh:mm:ss");
+		
+		private String m_value;
+		
+		TextPresets(String value) {
+			m_value = value;
+		}
 		
 		@Override
 		public String toString() {
-			switch (this) {
-			case UNMODIFIED:
-				return "[select preset text format]";
-			case PERCENT:
-				return "percent: " + this.getTextFormat();
-			case INTEGER:
-				return "integer: " + this.getTextFormat();
-			case FINANCIAL:
-				return "financial: " + this.getTextFormat();
-			case DATE:
-				return "date: " + this.getTextFormat();
-			case DATETIME:
-				return "date/time: " + this.getTextFormat();
-			case THOUSANDSEPARATED:
-				return "thousand separated: " + this.getTextFormat();
-			default:
-				return super.toString().toLowerCase();
-			}
+			return m_value;
 		}
 		
 		public String getTextFormat() {
@@ -146,6 +147,25 @@ public class XlsFormatterCellFormatterNodeModel extends TagBasedXlsCellFormatter
 				return "";
 			}
 		}
+		
+		/**
+		 * Get enum entry from its String value.
+		 * 
+		 * @param value The String value.
+		 * @return The enum entry.
+		 * @throws InvalidSettingsException If no enum entry could be found for the given String value.
+		 * @since 1.7
+		 */
+		public static TextPresets getFromValue(final String value) throws InvalidSettingsException {
+            for (final TextPresets rotation : values()) {
+                if (rotation.toString().equals(value)) {
+                    return rotation;
+                }
+            }
+            throw new InvalidSettingsException(XlsFormatterNodeParameterUtil.createInvalidEnumValueExceptionMessage(
+            		TextPresets.class, e -> e.toString(), value));
+        }
+		
 	}
 	
 	static final String CFGKEY_TEXT_PRESETS = "TextPresets";
@@ -300,6 +320,10 @@ public class XlsFormatterCellFormatterNodeModel extends TagBasedXlsCellFormatter
 		m_textFormat.validateSettings(settings);
 		m_cellStyle.validateSettings(settings);
 		m_textPresets.validateSettings(settings);
+		
+		if (settings.getBoolean("performTagValiation", false)) {
+			UiValidation.validateTagString(settings.getString(CFGKEY_TAGSTRING));
+	    }
 
 	}
 

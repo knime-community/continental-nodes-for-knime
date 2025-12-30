@@ -42,4 +42,19 @@ public class UiValidation {
 	public static void validateTagField(SettingsModelString tag) throws InvalidSettingsException {
 		validateTagField(tag, null);
 	}
+	
+	public static void validateTagString(String tag, String additionalEmptyErrorMessage) 
+		throws InvalidSettingsException {
+		
+		if (tag.trim().equals(""))
+			throw new InvalidSettingsException(UI_ERROR_EMPTY_TAG + 
+					(additionalEmptyErrorMessage == null ? "" : "\n" + additionalEmptyErrorMessage));
+		
+		if (!XlsFormatterTagTools.isValidSingleTag(tag))
+			throw new InvalidSettingsException(UI_ERROR_INVALID_TAG);
+	}
+	
+	public static void validateTagString(String tag) throws InvalidSettingsException {
+		validateTagString(tag, null);
+	}
 }

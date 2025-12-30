@@ -43,6 +43,7 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.port.PortType;
 
 import com.continental.knime.xlsformatter.commons.AddressingTools;
+import com.continental.knime.xlsformatter.commons.UiValidation;
 import com.continental.knime.xlsformatter.commons.Commons.Modes;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableCreateTools;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableValidator;
@@ -181,6 +182,10 @@ public class XlsControlTableFromCellRangeNodeModel extends NodeModel {
 		m_cellRange.validateSettings(settings);
 		m_tag.validateSettings(settings);
 		m_mode.validateSettings(settings);
+		
+		if (settings.getBoolean("performTagValiation", false)) {
+			UiValidation.validateTagString(settings.getString(CFGKEY_TAG));
+	    }
 	}
 
 	/**

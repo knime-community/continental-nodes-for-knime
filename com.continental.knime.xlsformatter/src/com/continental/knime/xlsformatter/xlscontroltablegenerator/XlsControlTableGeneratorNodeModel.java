@@ -20,6 +20,8 @@ package com.continental.knime.xlsformatter.xlscontroltablegenerator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.node.BufferedDataTable;
@@ -34,10 +36,13 @@ import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.port.PortType;
+import org.knime.node.parameters.widget.choices.Label;
 
 import com.continental.knime.xlsformatter.commons.WarningMessageContainer;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableAnalysisTools;
 import com.continental.knime.xlsformatter.commons.XlsFormatterUiOptions;
+import com.continental.knime.xlsformatter.porttype.XlsFormatterState.CellDataType;
+import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil;
 
 public class XlsControlTableGeneratorNodeModel extends NodeModel {
 
@@ -76,7 +81,18 @@ public class XlsControlTableGeneratorNodeModel extends NodeModel {
 	 * incoming data table).
 	 */
 	public enum OperationType {
+		@Label(value = "From arbitrary input table to XLS Control Table (wide or long/unpivoted)", description = """
+				If no special input table is detected, this mode of operation will exchange the input table's column and
+				 row headers to XLS-like style.
+				""")
 		STANDARD,
+		@Label(value = "From long/unpivoted layout to wide XLS Control Table", description = """
+				If the output of a previous unpivot operation by this node (see below) is detected as input table 
+				specification (no additional columns are allowed in this case), this mode pivots them back to a valid 
+				(wide) XLS Control Table.<br />In case you expected your input table to be of this kind, but the 
+				standard operation type was detected, please activate the debug logging view to learn about the cause 
+				of this decision.
+				""")
 		PIVOT_BACK;
 		
 		@Override
@@ -92,8 +108,27 @@ public class XlsControlTableGeneratorNodeModel extends NodeModel {
 		}
 		
 		public static OperationType getFromString(String value) {
-	    return XlsFormatterUiOptions.getEnumEntryFromString(OperationType.values(), value);
+			return XlsFormatterUiOptions.getEnumEntryFromString(OperationType.values(), value);
 		}
+		
+		/**
+		 * Get enum entry from its String value.
+		 * 
+		 * @param value The String value.
+		 * @return The enum entry.
+		 * @throws InvalidSettingsException If no enum entry could be found for the given String value.
+		 * @since 1.7
+		 */
+		public static OperationType getFromValue(final String value) throws InvalidSettingsException {
+            for (final OperationType operation : values()) {
+                if (operation.toString().equals(value)) {
+                    return operation;
+                }
+            }
+            throw new InvalidSettingsException(XlsFormatterNodeParameterUtil.createInvalidEnumValueExceptionMessage(
+            		OperationType.class, e -> e.toString(), value));
+        }
+		
 	}
 	
 	/**
@@ -107,10 +142,30 @@ public class XlsControlTableGeneratorNodeModel extends NodeModel {
 	 * inconsistent information in the other three columns being ignored).
 	 */
 	public enum InconsistencyResolutionOptions {
+		@Label(value = "Fail", description = """
+				If two or more columns hold contradicting target cell addressing information, let this node fail with 
+				an exception.
+				""")
 		FAIL,
+		@Label(value = "Use 'Cell'", description = """
+				If two or more columns hold contradicting target cell addressing information, ignore all columns but 
+				'Cell'.
+				""")
 		CELL,
+		@Label(value = "Use 'Column' and 'Row'", description = """
+				If two or more columns hold contradicting target cell addressing information, ignore all columns but 
+				'Column' and 'Row'.
+				""")
 		COLUMN,
+		@Label(value = "Use 'Column (comparable)' and 'Row'", description = """
+				If two or more columns hold contradicting target cell addressing information, ignore all columns but 
+				'Column (comparable)' and 'Row'.
+				""")
 		COLUMN_COMPARABLE,
+		@Label(value = "Use 'Column (number)' and 'Row'", description = """
+				If two or more columns hold contradicting target cell addressing information, ignore all columns but 
+				'Column (number)' and 'Row'.
+				""")
 		COLUMN_NUMBER;
 		
 		@Override
@@ -134,6 +189,25 @@ public class XlsControlTableGeneratorNodeModel extends NodeModel {
 		public static InconsistencyResolutionOptions getFromString(String value) {
 	    return XlsFormatterUiOptions.getEnumEntryFromString(InconsistencyResolutionOptions.values(), value);
 		}
+		
+		/**
+		 * Get enum entry from its String value.
+		 * 
+		 * @param value The String value.
+		 * @return The enum entry.
+		 * @throws InvalidSettingsException If no enum entry could be found for the given String value.
+		 * @since 1.7
+		 */
+		public static InconsistencyResolutionOptions getFromValue(final String value) throws InvalidSettingsException {
+            for (final InconsistencyResolutionOptions option : values()) {
+                if (option.toString().equals(value)) {
+                    return option;
+                }
+            }
+            throw new InvalidSettingsException(XlsFormatterNodeParameterUtil.createInvalidEnumValueExceptionMessage(
+            		InconsistencyResolutionOptions.class, e -> e.toString(), value));
+        }
+		
 	}
 	
 	/**

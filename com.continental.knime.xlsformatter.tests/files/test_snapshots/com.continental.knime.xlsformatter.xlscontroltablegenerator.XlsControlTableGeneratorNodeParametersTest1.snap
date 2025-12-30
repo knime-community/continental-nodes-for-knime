@@ -1,0 +1,209 @@
+{
+  "data" : {
+    "model" : {
+      "operationType" : "STANDARD",
+      "inconsistencyResolutionStrategy" : "FAIL",
+      "shiftRows" : false,
+      "unpivot" : false,
+      "extendedUnpivotColumns" : true
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "extendedUnpivotColumns" : {
+            "type" : "boolean",
+            "title" : "Add additional header columns",
+            "description" : "Add column headers like the column number, original column names, original row ID, and padded\nXLS column name. Padding is useful as wide tables might otherwise be difficult to correctly sort\n(e.g. AA, Y, Z order instead of Y, Z, AA → solved via 00Y, 00Z, 0AA).\n",
+            "default" : true
+          },
+          "inconsistencyResolutionStrategy" : {
+            "oneOf" : [ {
+              "const" : "FAIL",
+              "title" : "Fail"
+            }, {
+              "const" : "CELL",
+              "title" : "Use 'Cell'"
+            }, {
+              "const" : "COLUMN",
+              "title" : "Use 'Column' and 'Row'"
+            }, {
+              "const" : "COLUMN_COMPARABLE",
+              "title" : "Use 'Column (comparable)' and 'Row'"
+            }, {
+              "const" : "COLUMN_NUMBER",
+              "title" : "Use 'Column (number)' and 'Row'"
+            } ],
+            "title" : "Contradiction resolution strategy",
+            "description" : "In case the extended columns hold contradicting addressing information (e.g. A2 in 'Cell' and 3 in\n'Column number'), which information shall be taken to locate the cell on the sheet? This setting\nonly applies when the operation type is 'long to wide'.\n\n<ul>\n<li><b>Fail</b>: If two or more columns hold contradicting target cell addressing information, let this node fail with\nan exception.\n</li>\n<li><b>Use &#x27;Cell&#x27;</b>: If two or more columns hold contradicting target cell addressing information, ignore all columns but\n'Cell'.\n</li>\n<li><b>Use &#x27;Column&#x27; and &#x27;Row&#x27;</b>: If two or more columns hold contradicting target cell addressing information, ignore all columns but\n'Column' and 'Row'.\n</li>\n<li><b>Use &#x27;Column (comparable)&#x27; and &#x27;Row&#x27;</b>: If two or more columns hold contradicting target cell addressing information, ignore all columns but\n'Column (comparable)' and 'Row'.\n</li>\n<li><b>Use &#x27;Column (number)&#x27; and &#x27;Row&#x27;</b>: If two or more columns hold contradicting target cell addressing information, ignore all columns but\n'Column (number)' and 'Row'.\n</li>\n</ul>",
+            "default" : "FAIL"
+          },
+          "operationType" : {
+            "oneOf" : [ {
+              "const" : "STANDARD",
+              "title" : "From arbitrary input table to XLS Control Table (wide or long/unpivoted)"
+            }, {
+              "const" : "PIVOT_BACK",
+              "title" : "From long/unpivoted layout to wide XLS Control Table"
+            } ],
+            "title" : "Operation Type (set automatically)",
+            "description" : "The operation type is automatically set based on the provided input table.\nIf no special input table is detected, the standard operation will exchange the input table's\ncolumn and row headers to XLS-like style. If the output of a previous unpivot operation\nis detected, this mode pivots them back to a valid (wide) XLS Control Table.\n\n<ul>\n<li><b>From arbitrary input table to XLS Control Table (wide or long/unpivoted)</b>: If no special input table is detected, this mode of operation will exchange the input table's column and\n row headers to XLS-like style.\n</li>\n<li><b>From long/unpivoted layout to wide XLS Control Table</b>: If the output of a previous unpivot operation by this node (see below) is detected as input table\nspecification (no additional columns are allowed in this case), this mode pivots them back to a valid\n(wide) XLS Control Table.<br />In case you expected your input table to be of this kind, but the\nstandard operation type was detected, please activate the debug logging view to learn about the cause\nof this decision.\n</li>\n</ul>",
+            "default" : "STANDARD"
+          },
+          "shiftRows" : {
+            "type" : "boolean",
+            "title" : "Use first row as column header",
+            "description" : "Copy the original table's column header to a new first row. This is typically used\nin line with the corresponding setting in KNIME's Excel Writer node.\n",
+            "default" : false
+          },
+          "unpivot" : {
+            "type" : "boolean",
+            "title" : "Unpivot result table (for easier post-processing and re-pivoting)",
+            "description" : "Unpivot your input table, meaning that each input table cell will become an own output table row.\nOn this basis, own rules can be defined, e.g. to define tags required for many of the XLS\nFormatting nodes.\n",
+            "default" : false
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/operationType",
+      "options" : {
+        "format" : "radio",
+        "radioLayout" : "vertical"
+      },
+      "rule" : {
+        "effect" : "DISABLE",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/inconsistencyResolutionStrategy",
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "schema" : {
+            "not" : { }
+          }
+        }
+      }
+    }, {
+      "label" : "Result Table Structure Options",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/shiftRows",
+        "options" : {
+          "format" : "checkbox"
+        },
+        "rule" : {
+          "effect" : "SHOW",
+          "condition" : {
+            "type" : "AND",
+            "conditions" : [ {
+              "scope" : "#/properties/model/properties/operationType",
+              "schema" : {
+                "oneOf" : [ {
+                  "const" : "STANDARD"
+                } ]
+              }
+            }, {
+              "schema" : { }
+            } ]
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/unpivot",
+        "options" : {
+          "format" : "checkbox"
+        },
+        "rule" : {
+          "effect" : "ENABLE",
+          "condition" : {
+            "type" : "AND",
+            "conditions" : [ {
+              "scope" : "#/properties/model/properties/operationType",
+              "schema" : {
+                "oneOf" : [ {
+                  "const" : "STANDARD"
+                } ]
+              }
+            }, {
+              "schema" : { }
+            } ]
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/extendedUnpivotColumns",
+        "options" : {
+          "format" : "checkbox"
+        },
+        "rule" : {
+          "effect" : "ENABLE",
+          "condition" : {
+            "type" : "AND",
+            "conditions" : [ {
+              "type" : "AND",
+              "conditions" : [ {
+                "scope" : "#/properties/model/properties/operationType",
+                "schema" : {
+                  "oneOf" : [ {
+                    "const" : "STANDARD"
+                  } ]
+                }
+              }, {
+                "schema" : { }
+              } ]
+            }, {
+              "scope" : "#/properties/model/properties/unpivot",
+              "schema" : {
+                "const" : true
+              }
+            } ]
+          }
+        }
+      } ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "operationType" : {
+            "configPaths" : [ [ "OperationType" ] ]
+          },
+          "inconsistencyResolutionStrategy" : {
+            "configPaths" : [ [ "InconsistencyResolutionStrategy" ] ]
+          },
+          "shiftRows" : {
+            "configKey" : "RowShift"
+          },
+          "unpivot" : {
+            "configKey" : "Unpivot"
+          },
+          "extendedUnpivotColumns" : {
+            "configKey" : "ExtendedHeaderColumns"
+          }
+        }
+      }
+    }
+  },
+  "globalUpdates" : [ {
+    "trigger" : {
+      "id" : "after-open-dialog"
+    },
+    "triggerInitially" : true,
+    "dependencies" : [ ]
+  } ]
+}

@@ -1,0 +1,42 @@
+{
+  "data" : {
+    "model" : {
+      "author" : ""
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "author" : {
+            "type" : "string",
+            "title" : "Author",
+            "description" : "The author of the comment (can be left empty).",
+            "default" : ""
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/author"
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "author" : {
+            "configKey" : "Author"
+          }
+        }
+      }
+    }
+  }
+}

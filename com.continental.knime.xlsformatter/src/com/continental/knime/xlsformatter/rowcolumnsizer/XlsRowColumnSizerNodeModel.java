@@ -42,14 +42,17 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.port.PortObject;
 import org.knime.core.node.port.PortObjectSpec;
 import org.knime.core.node.port.PortType;
+import org.knime.node.parameters.widget.choices.Label;
 
 import com.continental.knime.xlsformatter.commons.TagBasedXlsCellFormatterNodeModel;
+import com.continental.knime.xlsformatter.commons.UiValidation;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableAnalysisTools;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableValidator;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableValidator.ControlTableType;
 import com.continental.knime.xlsformatter.commons.XlsFormatterUiOptions;
 import com.continental.knime.xlsformatter.porttype.XlsFormatterState;
 import com.continental.knime.xlsformatter.porttype.XlsFormatterStateSpec;
+import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil;
 
 public class XlsRowColumnSizerNodeModel extends TagBasedXlsCellFormatterNodeModel {
 
@@ -59,24 +62,48 @@ public class XlsRowColumnSizerNodeModel extends TagBasedXlsCellFormatterNodeMode
 
 
 	public enum ControlTableStyle {
-		STANDARD,
-		DIRECT;
+		@Label(value = "Standard tags", description = """
+				Tag in your input table for which the formatting of this node should be applied to.
+				""")
+		STANDARD("standard tags"),
+		@Label(value = "Size from control table", description = """
+				Don't search for tags in the input table, but use the provided non-missing size values directly.
+				""")
+		DIRECT("size from control table");
+		
+		private String m_value;
+		
+		private ControlTableStyle(String value) {
+			m_value = value;
+		}
 		
 		@Override
 		public String toString() {
-			switch (this) {
-			case STANDARD:
-				return XlsFormatterUiOptions.UI_LABEL_CONTROL_TABLE_STYLE_STANDARD;
-			case DIRECT:
-				return "size from control table";
-			default:
-				return this.toString().toLowerCase();
-			}
+			return m_value;
 		}
 		
 		public static ControlTableStyle getFromString(String value) {
 	    return XlsFormatterUiOptions.getEnumEntryFromString(ControlTableStyle.values(), value);
 		}
+		
+		/**
+		 * Retrieves the enum entry matching the provided value.
+		 * 
+		 * @param value the value to look for
+		 * @return the matching enum entry
+		 * @throws InvalidSettingsException if no matching entry could be found
+		 * @since 1.7
+		 */
+		public static ControlTableStyle getFromValue(final String value) throws InvalidSettingsException {
+            for (final ControlTableStyle tableStyle : values()) {
+                if (tableStyle.toString().equals(value)) {
+                    return tableStyle;
+                }
+            }
+            throw new InvalidSettingsException(XlsFormatterNodeParameterUtil.createInvalidEnumValueExceptionMessage(
+            		ControlTableStyle.class, e -> e.toString(), value));
+        }
+		
 	}
 	static final String CFGKEY_CONTROL_TABLE_STYLE = XlsFormatterUiOptions.UI_LABEL_CONTROL_TABLE_STYLE_KEY;
 	static final String DEFAULT_CONTROL_TABLE_STYLE = ControlTableStyle.STANDARD.toString();
@@ -84,24 +111,44 @@ public class XlsRowColumnSizerNodeModel extends TagBasedXlsCellFormatterNodeMode
 			new SettingsModelString(CFGKEY_CONTROL_TABLE_STYLE, DEFAULT_CONTROL_TABLE_STYLE);   	
 
 	public enum DimensionToSize {
-		ROW,
-		COLUMN;
+		@Label(value = "Column width")
+		COLUMN("column width"), //
+		@Label(value = "Row height")
+		ROW("row height");
+		
+		private String m_value;
+		
+		private DimensionToSize(String value) {
+			m_value = value;
+		}
 		
 		@Override
 		public String toString() {
-			switch (this) {
-			case ROW:
-				return "row height";
-			case COLUMN:
-				return "column width";
-			default:
-				return this.toString().toLowerCase();
-			}
+			return m_value;
 		}
 		
 		public static DimensionToSize getFromString(String value) {
 	    return XlsFormatterUiOptions.getEnumEntryFromString(DimensionToSize.values(), value);
 		}
+		
+		/**
+		 * Retrieves the enum entry matching the provided value.
+		 * 
+		 * @param value the value to look for
+		 * @return the matching enum entry
+		 * @throws InvalidSettingsException if no matching entry could be found
+		 * @since 1.7
+		 */
+		public static DimensionToSize getFromValue(final String value) throws InvalidSettingsException {
+            for (final DimensionToSize dimensionToSize : values()) {
+                if (dimensionToSize.toString().equals(value)) {
+                    return dimensionToSize;
+                }
+            }
+            throw new InvalidSettingsException(XlsFormatterNodeParameterUtil.createInvalidEnumValueExceptionMessage(
+            		DimensionToSize.class, e -> e.toString(), value));
+        }
+
 	}
 	
 	static final String CFGKEY_ROW_COLUMN_SIZE = "RowColumnSize";
@@ -250,6 +297,11 @@ public class XlsRowColumnSizerNodeModel extends TagBasedXlsCellFormatterNodeMode
 		m_tag.validateSettings(settings);
 		m_size.validateSettings(settings);
 		m_autoSize.validateSettings(settings);
+		
+		if (settings.getBoolean("performTagValiation", false)) {
+			UiValidation.validateTagString(settings.getString(CFGKEY_TAG));
+	    }
+		
 	}
 
 	/**

@@ -1,0 +1,248 @@
+{
+  "data" : {
+    "model" : {
+      "performTagValiation" : false,
+      "controlTableStyle" : "STANDARD",
+      "tag" : "header",
+      "dimensionToSize" : "COLUMN",
+      "sizeMode" : "CUSTOM",
+      "size" : 14.0
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "controlTableStyle" : {
+            "oneOf" : [ {
+              "const" : "STANDARD",
+              "title" : "Standard tags"
+            }, {
+              "const" : "DIRECT",
+              "title" : "Size from control table"
+            } ],
+            "title" : "Control table style (set automatically)",
+            "description" : "The control table style is set automatically depending on the connected control table.\n\n<ul>\n<li><b>Standard tags</b>: Tag in your input table for which the formatting of this node should be applied to.\n</li>\n<li><b>Size from control table</b>: Don't search for tags in the input table, but use the provided non-missing size values directly.\n</li>\n</ul>",
+            "default" : "STANDARD"
+          },
+          "dimensionToSize" : {
+            "oneOf" : [ {
+              "const" : "COLUMN",
+              "title" : "Column width"
+            }, {
+              "const" : "ROW",
+              "title" : "Row height"
+            } ],
+            "title" : "Resize dimension",
+            "description" : "Selection of whether to change row heights or column widths.",
+            "default" : "COLUMN"
+          },
+          "performTagValiation" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "size" : {
+            "type" : "number",
+            "format" : "double",
+            "title" : "Custom size",
+            "description" : "Select the row height or the column width. Standard height is ~14 and standard width is ~8.\n",
+            "default" : 14.0
+          },
+          "sizeMode" : {
+            "oneOf" : [ {
+              "const" : "CUSTOM",
+              "title" : "Custom"
+            }, {
+              "const" : "AUTO",
+              "title" : "Auto"
+            } ],
+            "title" : "Size mode",
+            "description" : "Choose a custom row height or auto-size the column width depending on its cells' contents and formatting.\nNote that the order of XLS formatting nodes is arbitrary and that the column auto-size settings are written\nlast to the XLS file by the XLS Formatter (apply) node. Auto-size functionality is only available for\ncolumns.\n",
+            "default" : "CUSTOM"
+          },
+          "tag" : {
+            "type" : "string",
+            "title" : "Applies to tag (single tag only)",
+            "description" : "Tag in your input table for which the formatting of this node should be applied to.\n",
+            "default" : "header"
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/controlTableStyle",
+      "options" : {
+        "format" : "radio",
+        "radioLayout" : "vertical"
+      },
+      "rule" : {
+        "effect" : "DISABLE",
+        "condition" : {
+          "schema" : { }
+        }
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/tag",
+      "providedOptions" : [ "validation.pattern" ],
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/controlTableStyle",
+          "schema" : {
+            "oneOf" : [ {
+              "const" : "STANDARD"
+            } ]
+          }
+        }
+      }
+    }, {
+      "label" : "Row and Column Size",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/dimensionToSize",
+        "options" : {
+          "format" : "valueSwitch"
+        },
+        "rule" : {
+          "effect" : "ENABLE",
+          "condition" : {
+            "scope" : "#/properties/model/properties/controlTableStyle",
+            "schema" : {
+              "oneOf" : [ {
+                "const" : "STANDARD"
+              } ]
+            }
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/sizeMode",
+        "options" : {
+          "format" : "valueSwitch"
+        },
+        "rule" : {
+          "effect" : "ENABLE",
+          "condition" : {
+            "type" : "AND",
+            "conditions" : [ {
+              "scope" : "#/properties/model/properties/controlTableStyle",
+              "schema" : {
+                "oneOf" : [ {
+                  "const" : "STANDARD"
+                } ]
+              }
+            }, {
+              "scope" : "#/properties/model/properties/dimensionToSize",
+              "schema" : {
+                "oneOf" : [ {
+                  "const" : "COLUMN"
+                } ]
+              }
+            } ]
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/size",
+        "options" : {
+          "validation" : {
+            "min" : {
+              "errorMessage" : "The value must be greater than 0.",
+              "parameters" : {
+                "isExclusive" : true,
+                "min" : 0.0
+              }
+            }
+          }
+        },
+        "rule" : {
+          "effect" : "ENABLE",
+          "condition" : {
+            "type" : "AND",
+            "conditions" : [ {
+              "scope" : "#/properties/model/properties/controlTableStyle",
+              "schema" : {
+                "oneOf" : [ {
+                  "const" : "STANDARD"
+                } ]
+              }
+            }, {
+              "type" : "OR",
+              "conditions" : [ {
+                "scope" : "#/properties/model/properties/dimensionToSize",
+                "schema" : {
+                  "oneOf" : [ {
+                    "const" : "ROW"
+                  } ]
+                }
+              }, {
+                "scope" : "#/properties/model/properties/sizeMode",
+                "schema" : {
+                  "oneOf" : [ {
+                    "const" : "CUSTOM"
+                  } ]
+                }
+              } ]
+            } ]
+          }
+        }
+      } ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "performTagValiation" : {
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "controlTableStyle" : {
+            "configPaths" : [ [ "ControlTableStyle" ] ]
+          },
+          "tag" : {
+            "configKey" : "Tag"
+          },
+          "dimensionToSize" : {
+            "configPaths" : [ [ "RowColumnSize" ] ]
+          },
+          "sizeMode" : {
+            "configPaths" : [ [ "AutoSize" ] ]
+          },
+          "size" : {
+            "configKey" : "Size"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/performTagValiation",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : true
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "id" : "after-open-dialog"
+    },
+    "triggerInitially" : true,
+    "dependencies" : [ "#/properties/model/properties/tag" ]
+  }, {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/tag"
+    },
+    "dependencies" : [ "#/properties/model/properties/tag" ]
+  } ]
+}

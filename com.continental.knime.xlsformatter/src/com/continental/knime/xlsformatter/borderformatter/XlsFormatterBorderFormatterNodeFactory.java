@@ -21,47 +21,118 @@ package com.continental.knime.xlsformatter.borderformatter;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import org.knime.node.impl.description.PortDescription;
 
-public class XlsFormatterBorderFormatterNodeFactory extends NodeFactory<XlsFormatterBorderFormatterNodeModel> {
+import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil;
 
-	/**
-	 * {@inheritDoc}
-	 */
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
+
+@SuppressWarnings("restriction")
+public class XlsFormatterBorderFormatterNodeFactory extends NodeFactory<XlsFormatterBorderFormatterNodeModel> 
+	implements NodeDialogFactory {
+
 	@Override
 	public XlsFormatterBorderFormatterNodeModel createNodeModel() {
 		return new XlsFormatterBorderFormatterNodeModel();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int getNrNodeViews() {
 		return 0;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public NodeView<XlsFormatterBorderFormatterNodeModel> createNodeView(final int viewIndex,
 			final XlsFormatterBorderFormatterNodeModel nodeModel) {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean hasDialog() {
 		return true;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
-	public NodeDialogPane createNodeDialogPane() {
-		return new XlsFormatterBorderFormatterNodeDialog();
+	public boolean hasNodeDialog() {
+		return XlsFormatterNodeParameterUtil.HAS_WEBUI_DIALOG;
 	}
+
+    private static final String NODE_NAME = "XLS Border Formatter";
+    
+    private static final String NODE_ICON = "./borderformatter.png";
+    
+    private static final String SHORT_DESCRIPTION = """
+            The XLS Border Formatter node changes cell borders of a given range (not necessarily rectangular)
+                specified by tags in a control table. You can select which borders of the matching cells shall be
+                displayed in which style and optionally also change the border color accordingly.
+            """;
+    
+    private static final String FULL_DESCRIPTION = """
+            The XLS Border Formatter node changes cell borders of a given range (not necessarily rectangular)
+                specified by tags in a control table. You can select which borders of the matching cells shall be
+                displayed in which style and optionally also change the border color accordingly.<p /> This node defines
+                a formatting instruction only. It needs to be written to an xlsx file via the <i>XLS Formatter
+                (apply)</i> node subsequently.
+            """;
+    
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Control Table", """
+                XLS Control Table holding tags that define which cells of the sheet to format.
+                """),
+            fixedPort("Optional XLS Formatter", """
+                The XLS Formatter input port potentially holding previous formatting instructions that the instructions
+                of this node shall be added to.
+                """)
+    );
+    
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("XLS Formatter", """
+                The XLS Formatter output port holding the collected formatting instructions including the added
+                formatting information from this node.
+                """)
+    );
+
+    /**
+     * {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public NodeDialogPane createNodeDialogPane() {
+    	if (XlsFormatterNodeParameterUtil.HAS_WEBUI_DIALOG) {
+    		return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+		}
+    	return new XlsFormatterBorderFormatterNodeDialog();
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, XlsFormatterBorderFormatterNodeParameters.class);
+    }
+
+	@Override
+	public NodeDescription createNodeDescription() {
+		return DefaultNodeDescriptionUtil.createNodeDescription( //
+				NODE_NAME, //
+				NODE_ICON, //
+				INPUT_PORTS, //
+				OUTPUT_PORTS, //
+				SHORT_DESCRIPTION, //
+				FULL_DESCRIPTION, //
+				List.of(), //
+				XlsFormatterBorderFormatterNodeParameters.class, //
+				null, //
+				NodeType.Manipulator, //
+				List.of(), //
+				null //
+		);
+	}
+    
 }

@@ -1,0 +1,307 @@
+{
+  "data" : {
+    "model" : {
+      "performTagValiation" : false,
+      "tag" : "header",
+      "midScalePointActive" : true,
+      "minThreshold" : 0.0,
+      "minColor" : {
+        "hexColorWithAlpha" : "#00FF00"
+      },
+      "midThreshold" : 0.5,
+      "midColor" : {
+        "hexColorWithAlpha" : "#FFFF00"
+      },
+      "maxThreshold" : 1.0,
+      "maxColor" : {
+        "hexColorWithAlpha" : "#FF0000"
+      }
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "maxColor" : {
+            "type" : "object",
+            "properties" : {
+              "hexColorWithAlpha" : {
+                "type" : "string",
+                "title" : "Max color",
+                "description" : "Choose a color in hex format with optional alpha channel.",
+                "default" : "#000000FF"
+              }
+            },
+            "default" : {
+              "hexColorWithAlpha" : "#000000FF"
+            }
+          },
+          "maxThreshold" : {
+            "type" : "number",
+            "format" : "double",
+            "title" : "Max",
+            "description" : "Set the upper bound for the coloring in the conditional formatter. The corresponding color will\nbe displayed for all values greater or equal than this threshold.\n",
+            "default" : 1.0
+          },
+          "midColor" : {
+            "type" : "object",
+            "properties" : {
+              "hexColorWithAlpha" : {
+                "type" : "string",
+                "title" : "Mid color",
+                "description" : "Choose a color in hex format with optional alpha channel.",
+                "default" : "#000000FF"
+              }
+            },
+            "default" : {
+              "hexColorWithAlpha" : "#000000FF"
+            }
+          },
+          "midScalePointActive" : {
+            "type" : "boolean",
+            "title" : "Enable mid scale point",
+            "description" : "Set this option if you want to create a three level coloring scheme.\n",
+            "default" : true
+          },
+          "midThreshold" : {
+            "type" : "number",
+            "format" : "double",
+            "title" : "Mid",
+            "description" : "Set the middle scaling point for the coloring in the conditional formatter.\n",
+            "default" : 0.5
+          },
+          "minColor" : {
+            "type" : "object",
+            "properties" : {
+              "hexColorWithAlpha" : {
+                "type" : "string",
+                "title" : "Min color",
+                "description" : "Choose a color in hex format with optional alpha channel.",
+                "default" : "#000000FF"
+              }
+            },
+            "default" : {
+              "hexColorWithAlpha" : "#000000FF"
+            }
+          },
+          "minThreshold" : {
+            "type" : "number",
+            "format" : "double",
+            "title" : "Min",
+            "description" : "Set the lower bound for the coloring in the conditional formatter. The corresponding color will\nbe displayed for all values smaller or equal than this threshold.\n",
+            "default" : 0.0
+          },
+          "performTagValiation" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "tag" : {
+            "type" : "string",
+            "title" : "Applies to tag (single tag only)",
+            "description" : "Tag in your input table for which the formatting of this node should be applied to.\n",
+            "default" : "header"
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/tag",
+      "providedOptions" : [ "validation.pattern" ]
+    }, {
+      "label" : "Conditional Formatting Settings",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/midScalePointActive",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "HorizontalLayout",
+        "elements" : [ {
+          "type" : "Control",
+          "scope" : "#/properties/model/properties/minThreshold",
+          "options" : {
+            "stepSize" : 0.1,
+            "validation" : { }
+          },
+          "providedOptions" : [ "validation.max" ]
+        }, {
+          "type" : "Control",
+          "scope" : "#/properties/model/properties/minColor/properties/hexColorWithAlpha",
+          "options" : {
+            "validation" : {
+              "pattern" : {
+                "errorMessage" : "Invalid color format. Please provide a hex color in the format #RRGGBB or #RRGGBBAA.",
+                "parameters" : {
+                  "pattern" : "^#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
+                }
+              }
+            }
+          }
+        } ]
+      }, {
+        "type" : "HorizontalLayout",
+        "elements" : [ {
+          "type" : "Control",
+          "scope" : "#/properties/model/properties/midThreshold",
+          "options" : {
+            "stepSize" : 0.1,
+            "validation" : { }
+          },
+          "providedOptions" : [ "validation.max" ],
+          "rule" : {
+            "effect" : "ENABLE",
+            "condition" : {
+              "scope" : "#/properties/model/properties/midScalePointActive",
+              "schema" : {
+                "const" : true
+              }
+            }
+          }
+        }, {
+          "type" : "Control",
+          "scope" : "#/properties/model/properties/midColor/properties/hexColorWithAlpha",
+          "options" : {
+            "validation" : {
+              "pattern" : {
+                "errorMessage" : "Invalid color format. Please provide a hex color in the format #RRGGBB or #RRGGBBAA.",
+                "parameters" : {
+                  "pattern" : "^#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
+                }
+              }
+            }
+          },
+          "rule" : {
+            "effect" : "ENABLE",
+            "condition" : {
+              "scope" : "#/properties/model/properties/midScalePointActive",
+              "schema" : {
+                "const" : true
+              }
+            }
+          }
+        } ]
+      }, {
+        "type" : "HorizontalLayout",
+        "elements" : [ {
+          "type" : "Control",
+          "scope" : "#/properties/model/properties/maxThreshold",
+          "options" : {
+            "stepSize" : 0.1,
+            "validation" : { }
+          }
+        }, {
+          "type" : "Control",
+          "scope" : "#/properties/model/properties/maxColor/properties/hexColorWithAlpha",
+          "options" : {
+            "validation" : {
+              "pattern" : {
+                "errorMessage" : "Invalid color format. Please provide a hex color in the format #RRGGBB or #RRGGBBAA.",
+                "parameters" : {
+                  "pattern" : "^#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
+                }
+              }
+            }
+          }
+        } ]
+      } ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "performTagValiation" : {
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "tag" : {
+            "configKey" : "Tag"
+          },
+          "midScalePointActive" : {
+            "configKey" : "MidScalePointOn"
+          },
+          "minThreshold" : {
+            "configKey" : "MinValue"
+          },
+          "minColor" : {
+            "type" : "object",
+            "properties" : {
+              "hexColorWithAlpha" : {
+                "configPaths" : [ [ "Red" ], [ "Green" ], [ "Blue" ], [ "Alpha" ] ]
+              }
+            },
+            "configKey" : "MinColor"
+          },
+          "midThreshold" : {
+            "configKey" : "MidValue"
+          },
+          "midColor" : {
+            "type" : "object",
+            "properties" : {
+              "hexColorWithAlpha" : {
+                "configPaths" : [ [ "Red" ], [ "Green" ], [ "Blue" ], [ "Alpha" ] ]
+              }
+            },
+            "configKey" : "MidColor"
+          },
+          "maxThreshold" : {
+            "configKey" : "MaxValue"
+          },
+          "maxColor" : {
+            "type" : "object",
+            "properties" : {
+              "hexColorWithAlpha" : {
+                "configPaths" : [ [ "Red" ], [ "Green" ], [ "Blue" ], [ "Alpha" ] ]
+              }
+            },
+            "configKey" : "MaxColor"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/performTagValiation",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : true
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "id" : "after-open-dialog"
+    },
+    "triggerInitially" : true,
+    "dependencies" : [ "#/properties/model/properties/maxThreshold", "#/properties/model/properties/midScalePointActive", "#/properties/model/properties/midThreshold", "#/properties/model/properties/tag" ]
+  }, {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/maxThreshold"
+    },
+    "dependencies" : [ "#/properties/model/properties/maxThreshold", "#/properties/model/properties/midScalePointActive", "#/properties/model/properties/midThreshold" ]
+  }, {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/midScalePointActive"
+    },
+    "dependencies" : [ "#/properties/model/properties/maxThreshold", "#/properties/model/properties/midScalePointActive", "#/properties/model/properties/midThreshold" ]
+  }, {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/midThreshold"
+    },
+    "dependencies" : [ "#/properties/model/properties/maxThreshold", "#/properties/model/properties/midScalePointActive", "#/properties/model/properties/midThreshold" ]
+  }, {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/tag"
+    },
+    "dependencies" : [ "#/properties/model/properties/tag" ]
+  } ]
+}

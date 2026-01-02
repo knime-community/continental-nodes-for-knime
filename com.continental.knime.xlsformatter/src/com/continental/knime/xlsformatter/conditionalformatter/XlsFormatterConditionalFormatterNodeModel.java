@@ -44,6 +44,7 @@ import org.knime.core.node.port.PortType;
 
 import com.continental.knime.xlsformatter.commons.AddressingTools;
 import com.continental.knime.xlsformatter.commons.TagBasedXlsCellFormatterNodeModel;
+import com.continental.knime.xlsformatter.commons.UiValidation;
 import com.continental.knime.xlsformatter.commons.WarningMessageContainer;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableAnalysisTools;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableValidator;
@@ -214,6 +215,11 @@ public class XlsFormatterConditionalFormatterNodeModel extends TagBasedXlsCellFo
 		m_midColor.validateSettings(settings);
 		m_maxThreshold.validateSettings(settings);
 		m_maxColor.validateSettings(settings);
+		
+		if (settings.getBoolean("performTagValiation", false)) {
+			UiValidation.validateTagString(settings.getString(CFGKEY_TAG));
+	    }
+		
 	}
 
 	/**

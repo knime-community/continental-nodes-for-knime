@@ -1,0 +1,101 @@
+{
+  "data" : {
+    "model" : {
+      "performTagValiation" : false,
+      "tag" : "header",
+      "function" : "FREEZE"
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "function" : {
+            "oneOf" : [ {
+              "const" : "FREEZE",
+              "title" : "Freeze sheet at tagged cell"
+            }, {
+              "const" : "AUTOFILTER",
+              "title" : "Set auto-filter for tagged cell range"
+            }, {
+              "const" : "HIDE_COLUMNS",
+              "title" : "Hide columns of tagged cells"
+            }, {
+              "const" : "HIDE_ROWS",
+              "title" : "Hide rows of tagged cells"
+            } ],
+            "title" : "Sheet modifications",
+            "description" : "Select which sheet modifications are applied based on tags in the control table.\n\n<ul>\n<li><b>Freeze sheet at tagged cell</b>: Freeze your sheet at a specific cell (more precisely: at its top-left corner) identified via a tag in\nthe control table. Note that the tag may occur more than once in the control table. In this case, the\ntop-left-most occurrence is used.\n</li>\n<li><b>Set auto-filter for tagged cell range</b>: Set an auto-filter for a range based on a single rectangular range of a matching tag in the control\ntable.\n</li>\n<li><b>Hide columns of tagged cells</b>: Hide the columns from your sheet based on a matching tag in any of the columns' cells.\n</li>\n<li><b>Hide rows of tagged cells</b>: Hide the rows from your sheet based on a matching tag in any of the rows' cells.\n</li>\n</ul>",
+            "default" : "FREEZE"
+          },
+          "performTagValiation" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "tag" : {
+            "type" : "string",
+            "title" : "Applies to tag (single tag only)",
+            "description" : "Tag in your input table for which the formatting of this node should be applied to.\n",
+            "default" : "header"
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/tag",
+      "providedOptions" : [ "validation.pattern" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/function",
+      "options" : {
+        "format" : "radio",
+        "radioLayout" : "vertical"
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "performTagValiation" : {
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "tag" : {
+            "configKey" : "Tag"
+          },
+          "function" : {
+            "configPaths" : [ [ "Function" ] ]
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/performTagValiation",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : true
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "id" : "after-open-dialog"
+    },
+    "triggerInitially" : true,
+    "dependencies" : [ "#/properties/model/properties/tag" ]
+  }, {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/tag"
+    },
+    "dependencies" : [ "#/properties/model/properties/tag" ]
+  } ]
+}

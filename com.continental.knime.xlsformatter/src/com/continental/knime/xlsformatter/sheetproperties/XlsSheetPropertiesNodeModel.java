@@ -38,8 +38,10 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.port.PortObject;
 import org.knime.core.node.port.PortObjectSpec;
 import org.knime.core.node.port.PortType;
+import org.knime.node.parameters.widget.choices.Label;
 
 import com.continental.knime.xlsformatter.commons.TagBasedXlsCellFormatterNodeModel;
+import com.continental.knime.xlsformatter.commons.UiValidation;
 import com.continental.knime.xlsformatter.commons.WarningMessageContainer;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableAnalysisTools;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableValidator;
@@ -47,6 +49,7 @@ import com.continental.knime.xlsformatter.commons.XlsFormatterTagTools;
 import com.continental.knime.xlsformatter.commons.XlsFormatterUiOptions;
 import com.continental.knime.xlsformatter.porttype.XlsFormatterState;
 import com.continental.knime.xlsformatter.porttype.XlsFormatterStateSpec;
+import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil;
 
 public class XlsSheetPropertiesNodeModel extends TagBasedXlsCellFormatterNodeModel {
 
@@ -60,30 +63,59 @@ public class XlsSheetPropertiesNodeModel extends TagBasedXlsCellFormatterNodeMod
 			new SettingsModelString(CFGKEY_TAG, DEFAULT_TAG);
 
 	public enum FunctionOptions {
-		FREEZE,
-		AUTOFILTER,
-		HIDE_COLUMNS,
-		HIDE_ROWS;
+		@Label(value = "Freeze sheet at tagged cell", description = """
+				Freeze your sheet at a specific cell (more precisely: at its top-left corner) identified via a tag in 
+				the control table. Note that the tag may occur more than once in the control table. In this case, the 
+				top-left-most occurrence is used.
+				""")
+		FREEZE("freeze sheet at tagged cell"),
+		@Label(value = "Set auto-filter for tagged cell range", description = """
+				Set an auto-filter for a range based on a single rectangular range of a matching tag in the control 
+				table.
+				""")
+		AUTOFILTER("set auto-filter for tagged cell range"),
+		@Label(value = "Hide columns of tagged cells", description = """
+				Hide the columns from your sheet based on a matching tag in any of the columns' cells.
+				""")
+		HIDE_COLUMNS("hide columns of tagged cells"),
+		@Label(value = "Hide rows of tagged cells", description = """
+				Hide the rows from your sheet based on a matching tag in any of the rows' cells.
+				""")
+		HIDE_ROWS("hide rows of tagged cells");
 
+		private String m_value;
+		
+		FunctionOptions(String value) {
+			m_value = value;
+		}
+		
 		@Override
 		public String toString() {
-			switch (this) {
-			case FREEZE:
-				return "freeze sheet at tagged cell";
-			case AUTOFILTER:
-				return "set auto-filter for tagged cell range";
-			case HIDE_COLUMNS:
-				return "hide columns of tagged cells";
-			case HIDE_ROWS:
-				return "hide rows of tagged cells";
-			default:
-				return this.toString().toLowerCase();
-			}
+			return m_value;
 		}
 
 		public static FunctionOptions getFromString(String value) {
 			return XlsFormatterUiOptions.getEnumEntryFromString(FunctionOptions.values(), value);
 		}
+		
+		/**
+		 * Retrieves the enum option from its string value
+		 * 
+		 * @param value the string value
+		 * @return the corresponding enum option
+		 * @throws InvalidSettingsException if the value does not correspond to any option
+		 * @since 1,7
+		 */
+		public static FunctionOptions getFromValue(final String value) throws InvalidSettingsException {
+            for (final FunctionOptions option : values()) {
+                if (option.toString().equals(value)) {
+                    return option;
+                }
+            }
+            throw new InvalidSettingsException(XlsFormatterNodeParameterUtil.createInvalidEnumValueExceptionMessage(
+            		FunctionOptions.class, e -> e.toString(), value));
+        }
+	
 	}
 
 	static final String CFGKEY_FUNCTION = "Function";
@@ -222,6 +254,11 @@ public class XlsSheetPropertiesNodeModel extends TagBasedXlsCellFormatterNodeMod
 
 		m_tag.validateSettings(settings);
 		m_function.validateSettings(settings);
+		
+		if (settings.getBoolean("performTagValiation", false)) {
+			UiValidation.validateTagString(settings.getString(CFGKEY_TAG));
+	    }
+		
 	}
 
 	/**

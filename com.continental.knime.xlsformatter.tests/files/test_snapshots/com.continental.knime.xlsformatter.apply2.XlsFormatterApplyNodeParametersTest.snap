@@ -1,0 +1,320 @@
+{
+  "data" : {
+    "model" : {
+      "sourceFile" : {
+        "file" : {
+          "path" : {
+            "fsCategory" : "LOCAL",
+            "path" : "",
+            "timeout" : 10000,
+            "context" : {
+              "fsToString" : "(LOCAL, )"
+            }
+          }
+        }
+      },
+      "destinationFile" : {
+        "file" : {
+          "path" : {
+            "fsCategory" : "LOCAL",
+            "path" : "",
+            "timeout" : 10000,
+            "context" : {
+              "fsToString" : "(LOCAL, )"
+            }
+          }
+        },
+        "createMissingFolders" : false,
+        "overwritePolicy" : "overwrite"
+      },
+      "preserveSourceNumberFormats" : true,
+      "openOutputFile" : false,
+      "isOpenOutputFileEnabled" : false
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "destinationFile" : {
+            "type" : "object",
+            "properties" : {
+              "createMissingFolders" : {
+                "type" : "boolean",
+                "title" : "Create missing folders",
+                "description" : "If enabled, missing folders in the specified path will be created automatically.",
+                "default" : false
+              },
+              "file" : {
+                "type" : "object",
+                "properties" : {
+                  "path" : {
+                    "type" : "object",
+                    "default" : {
+                      "fsCategory" : "LOCAL",
+                      "path" : "",
+                      "timeout" : 10000,
+                      "context" : {
+                        "fsToString" : "(LOCAL, )"
+                      }
+                    }
+                  }
+                },
+                "title" : "File",
+                "description" : "The file to write the formatted .xlsx to.",
+                "default" : {
+                  "path" : {
+                    "fsCategory" : "LOCAL",
+                    "path" : "",
+                    "timeout" : 10000,
+                    "context" : {
+                      "fsToString" : "(LOCAL, )"
+                    }
+                  }
+                }
+              },
+              "overwritePolicy" : {
+                "oneOf" : [ {
+                  "const" : "fail",
+                  "title" : "Fail"
+                }, {
+                  "const" : "overwrite",
+                  "title" : "Overwrite"
+                }, {
+                  "const" : "ignore",
+                  "title" : "Ignore"
+                }, {
+                  "const" : "append",
+                  "title" : "Append"
+                } ],
+                "title" : "If exists",
+                "description" : "Specify the behavior of the node in case the output file already exists.<ul><li><b>Overwrite</b>: Will replace any existing file.</li><li><b>Fail</b>: Will issue an error during the node's execution (to prevent unintentional overwrite).</li></ul>",
+                "default" : "overwrite"
+              }
+            },
+            "default" : {
+              "file" : {
+                "path" : {
+                  "fsCategory" : "LOCAL",
+                  "path" : "",
+                  "timeout" : 10000,
+                  "context" : {
+                    "fsToString" : "(LOCAL, )"
+                  }
+                }
+              },
+              "createMissingFolders" : false,
+              "overwritePolicy" : "overwrite"
+            }
+          },
+          "isOpenOutputFileEnabled" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "openOutputFile" : {
+            "type" : "boolean",
+            "title" : "Open output file after execution",
+            "description" : "Once the node execution has been finished, the output .xlsx file will be opened automatically.\nNote: Only files on your local file system can be opened.\n",
+            "default" : false
+          },
+          "preserveSourceNumberFormats" : {
+            "type" : "boolean",
+            "title" : "Preserve source file's cell number formats",
+            "description" : "When selected, the original number formats from the source file (e.g. date cells written by KNIME)\nwill be preserved in the output file. When unchecked, default formatting may be applied.\n",
+            "default" : true
+          },
+          "sourceFile" : {
+            "type" : "object",
+            "properties" : {
+              "file" : {
+                "type" : "object",
+                "properties" : {
+                  "path" : {
+                    "type" : "object",
+                    "default" : {
+                      "fsCategory" : "LOCAL",
+                      "path" : "",
+                      "timeout" : 10000,
+                      "context" : {
+                        "fsToString" : "(LOCAL, )"
+                      }
+                    }
+                  }
+                },
+                "title" : "File",
+                "description" : "Select a .xlsx file to apply the formatting to.",
+                "default" : {
+                  "path" : {
+                    "fsCategory" : "LOCAL",
+                    "path" : "",
+                    "timeout" : 10000,
+                    "context" : {
+                      "fsToString" : "(LOCAL, )"
+                    }
+                  }
+                }
+              }
+            },
+            "default" : {
+              "file" : {
+                "path" : {
+                  "fsCategory" : "LOCAL",
+                  "path" : "",
+                  "timeout" : 10000,
+                  "context" : {
+                    "fsToString" : "(LOCAL, )"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "label" : "Source",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/sourceFile/properties/file",
+        "options" : {
+          "fileSystems" : [ "LOCAL", "SPACE", "EMBEDDED", "CONNECTED" ],
+          "isLocal" : true,
+          "isWriter" : true,
+          "selectionMode" : "FILE",
+          "spaceFSOptions" : {
+            "mountId" : "Local space"
+          },
+          "format" : "fileChooser"
+        }
+      } ]
+    }, {
+      "label" : "Destination",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/destinationFile/properties/file",
+        "options" : {
+          "fileSystems" : [ "LOCAL", "SPACE", "EMBEDDED", "CUSTOM_URL", "CONNECTED" ],
+          "isLocal" : true,
+          "isWriter" : true,
+          "selectionMode" : "FILE",
+          "spaceFSOptions" : {
+            "mountId" : "Local space"
+          },
+          "format" : "fileChooser"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/destinationFile/properties/createMissingFolders",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/destinationFile/properties/overwritePolicy",
+        "options" : {
+          "format" : "valueSwitch"
+        },
+        "providedOptions" : [ "possibleValues" ]
+      } ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/preserveSourceNumberFormats",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/openOutputFile",
+      "options" : {
+        "format" : "checkbox"
+      },
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/isOpenOutputFileEnabled",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "sourceFile" : {
+            "type" : "object",
+            "properties" : {
+              "file" : {
+                "configPaths" : [ [ "path" ] ]
+              }
+            },
+            "configKey" : "InputFile"
+          },
+          "destinationFile" : {
+            "type" : "object",
+            "properties" : {
+              "file" : {
+                "configPaths" : [ [ "path" ] ]
+              },
+              "createMissingFolders" : {
+                "configKey" : "create_missing_folders"
+              },
+              "overwritePolicy" : {
+                "configKey" : "if_path_exists"
+              }
+            },
+            "configKey" : "OutputFile"
+          },
+          "preserveSourceNumberFormats" : {
+            "configKey" : "PreserveSourceNumberFormats",
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "openOutputFile" : {
+            "configKey" : "OpenOutputFile"
+          },
+          "isOpenOutputFileEnabled" : {
+            "configPaths" : [ ]
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/destinationFile/properties/overwritePolicy",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "overwrite",
+        "text" : "Overwrite"
+      }, {
+        "id" : "fail",
+        "text" : "Fail"
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/isOpenOutputFileEnabled",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : true
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/destinationFile"
+    },
+    "dependencies" : [ "#/properties/model/properties/destinationFile" ]
+  } ]
+}

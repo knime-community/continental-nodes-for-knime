@@ -42,6 +42,7 @@ import org.knime.core.node.port.PortObjectSpec;
 import org.knime.core.node.port.PortType;
 
 import com.continental.knime.xlsformatter.commons.TagBasedXlsCellFormatterNodeModel;
+import com.continental.knime.xlsformatter.commons.UiValidation;
 import com.continental.knime.xlsformatter.commons.WarningMessageContainer;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableAnalysisTools;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableValidator;
@@ -254,6 +255,14 @@ public class XlsFormatterBorderFormatterNodeModel extends TagBasedXlsCellFormatt
 		m_borderInnerHorizontal.validateSettings(settings);
 		m_borderChangeColor.validateSettings(settings);
 		m_borderColor.validateSettings(settings);
+		
+		if (settings.getBoolean("performTagValiation", false)) {
+			UiValidation.validateTagString(settings.getString(CFGKEY_TAGSTRING), """
+					Alternatively, activate the 'all tags' option to apply the border to all different tags found in the
+					 control table.
+					""");
+	    }
+		
 	}
 
 	/**

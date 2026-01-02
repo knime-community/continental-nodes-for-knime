@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="settings.xml">
+    <entry key="node_file" type="xstring" value="settings.xml"/>
+    <config key="flow_stack"/>
+    <config key="internal_node_subsettings">
+        <entry key="memory_policy" type="xstring" value="CacheSmallInMemory"/>
+    </config>
+    <config key="model">
+        <config key="Tag_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="Tag" type="xstring" value="header"/>
+        <config key="MidScalePointOn_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="MidScalePointOn" type="xboolean" value="true"/>
+        <config key="MinValue_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_double"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="MinValue" type="xdouble" value="0.0"/>
+        <config key="MinColor_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_color"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <config key="MinColor">
+            <entry key="Red" type="xint" value="0"/>
+            <entry key="Green" type="xint" value="255"/>
+            <entry key="Blue" type="xint" value="0"/>
+            <entry key="Alpha" type="xint" value="255"/>
+        </config>
+        <config key="MidValue_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_double"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="MidValue" type="xdouble" value="0.5"/>
+        <config key="MidColor_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_color"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <config key="MidColor">
+            <entry key="Red" type="xint" value="255"/>
+            <entry key="Green" type="xint" value="255"/>
+            <entry key="Blue" type="xint" value="0"/>
+            <entry key="Alpha" type="xint" value="255"/>
+        </config>
+        <config key="MaxValue_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_double"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="MaxValue" type="xdouble" value="1.0"/>
+        <config key="MaxColor_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_color"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <config key="MaxColor">
+            <entry key="Red" type="xint" value="255"/>
+            <entry key="Green" type="xint" value="0"/>
+            <entry key="Blue" type="xint" value="0"/>
+            <entry key="Alpha" type="xint" value="255"/>
+        </config>
+    </config>
+    <entry key="customDescription" type="xstring" isnull="true" value=""/>
+    <entry key="state" type="xstring" value="CONFIGURED"/>
+    <entry key="factory" type="xstring" value="com.continental.knime.xlsformatter.conditionalformatter.XlsFormatterConditionalFormatterNodeFactory"/>
+    <entry key="node-name" type="xstring" value="XLS Conditional Formatter"/>
+    <entry key="node-bundle-name" type="xstring" value="XLS Formatting &amp;amp; Utilities"/>
+    <entry key="node-bundle-symbolic-name" type="xstring" value="com.continental.knime.xlsformatter"/>
+    <entry key="node-bundle-vendor" type="xstring" value="Continental"/>
+    <entry key="node-bundle-version" type="xstring" value="1.6.0.v202511121125"/>
+    <entry key="node-feature-name" type="xstring" value="XLS Formatting &amp; Utilities"/>
+    <entry key="node-feature-symbolic-name" type="xstring" value="com.continental.knime.feature.feature.group"/>
+    <entry key="node-feature-vendor" type="xstring" value="Continental"/>
+    <entry key="node-feature-version" type="xstring" value="1.6.0.v202511121125"/>
+    <config key="factory_settings"/>
+    <entry key="name" type="xstring" value="XLS Conditional Formatter"/>
+    <entry key="hasContent" type="xboolean" value="false"/>
+    <entry key="isInactive" type="xboolean" value="false"/>
+    <config key="ports">
+        <config key="port_1">
+            <entry key="index" type="xint" value="1"/>
+            <entry key="port_dir_location" type="xstring" isnull="true" value=""/>
+        </config>
+    </config>
+    <config key="filestores">
+        <entry key="file_store_location" type="xstring" isnull="true" value=""/>
+        <entry key="file_store_id" type="xstring" isnull="true" value=""/>
+    </config>
+</config>

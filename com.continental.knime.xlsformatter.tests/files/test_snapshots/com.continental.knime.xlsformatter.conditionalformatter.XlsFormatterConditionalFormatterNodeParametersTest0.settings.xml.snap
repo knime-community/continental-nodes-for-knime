@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="test">
+    <entry key="performTagValiation" type="xboolean" value="false"/>
+    <entry key="Tag" type="xstring" value="header"/>
+    <entry key="MidScalePointOn" type="xboolean" value="true"/>
+    <entry key="MinValue" type="xdouble" value="0.0"/>
+    <config key="MinColor">
+        <entry key="Red" type="xint" value="0"/>
+        <entry key="Green" type="xint" value="255"/>
+        <entry key="Blue" type="xint" value="0"/>
+        <entry key="Alpha" type="xint" value="255"/>
+    </config>
+    <entry key="MidValue" type="xdouble" value="0.5"/>
+    <config key="MidColor">
+        <entry key="Red" type="xint" value="255"/>
+        <entry key="Green" type="xint" value="255"/>
+        <entry key="Blue" type="xint" value="0"/>
+        <entry key="Alpha" type="xint" value="255"/>
+    </config>
+    <entry key="MaxValue" type="xdouble" value="1.0"/>
+    <config key="MaxColor">
+        <entry key="Red" type="xint" value="255"/>
+        <entry key="Green" type="xint" value="0"/>
+        <entry key="Blue" type="xint" value="0"/>
+        <entry key="Alpha" type="xint" value="255"/>
+    </config>
+</config>

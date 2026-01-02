@@ -1,0 +1,335 @@
+{
+  "data" : {
+    "model" : {
+      "performTagValiation" : true,
+      "allTags" : false,
+      "tag" : "header",
+      "borderStyle" : "NORMAL",
+      "changeBorderColor" : false,
+      "borderColor" : {
+        "hexColorWithAlpha" : "#000000FF"
+      },
+      "borderTop" : false,
+      "borderLeft" : false,
+      "borderRight" : false,
+      "borderBottom" : false,
+      "borderInnerVertical" : false,
+      "borderInnerHorizontal" : false
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "allTags" : {
+            "type" : "boolean",
+            "title" : "Applies to all tags",
+            "description" : "Instead of specifying a single tag, the border formatting is applied repetitively to all distinct\ntags found in the control table. Note that in this case, all matching cells will be processed\nwith the selected border formatting, which usually leads to overlapping cells to accumulate/overlap\nin their appearance.\n",
+            "default" : false
+          },
+          "borderBottom" : {
+            "type" : "boolean",
+            "title" : "Bottom",
+            "description" : "Set the bottom outer border of your tag range(s).\n",
+            "default" : false
+          },
+          "borderColor" : {
+            "type" : "object",
+            "properties" : {
+              "hexColorWithAlpha" : {
+                "type" : "string",
+                "title" : "Color",
+                "description" : "Choose a color in hex format with optional alpha channel.",
+                "default" : "#000000FF"
+              }
+            },
+            "default" : {
+              "hexColorWithAlpha" : "#000000FF"
+            }
+          },
+          "borderInnerHorizontal" : {
+            "type" : "boolean",
+            "title" : "Inner horizontal",
+            "description" : "Set the inner horizontal border of your tag range(s).\n",
+            "default" : false
+          },
+          "borderInnerVertical" : {
+            "type" : "boolean",
+            "title" : "Inner vertical",
+            "description" : "Set the inner vertical border of your tag range(s).\n",
+            "default" : false
+          },
+          "borderLeft" : {
+            "type" : "boolean",
+            "title" : "Left",
+            "description" : "Set the left outer border of your tag range(s).\n",
+            "default" : false
+          },
+          "borderRight" : {
+            "type" : "boolean",
+            "title" : "Right",
+            "description" : "Set the right outer border of your tag range(s).\n",
+            "default" : false
+          },
+          "borderStyle" : {
+            "oneOf" : [ {
+              "const" : "UNMODIFIED",
+              "title" : "Unmodified"
+            }, {
+              "const" : "NONE",
+              "title" : "None"
+            }, {
+              "const" : "NORMAL",
+              "title" : "Normal"
+            }, {
+              "const" : "DOUBLE",
+              "title" : "Double"
+            }, {
+              "const" : "DASHED",
+              "title" : "Dashed"
+            }, {
+              "const" : "THICK",
+              "title" : "Thick"
+            }, {
+              "const" : "DASHED_THICK",
+              "title" : "Dashed_thick"
+            }, {
+              "const" : "EXTRA_THICK",
+              "title" : "Extra_thick"
+            } ],
+            "title" : "Border color style",
+            "description" : "Select the style your border should get (e.g. normal, thick, dashed, ...).\n",
+            "default" : "NORMAL"
+          },
+          "borderTop" : {
+            "type" : "boolean",
+            "title" : "Top",
+            "description" : "Set the top outer border of your tag range(s).\n",
+            "default" : false
+          },
+          "changeBorderColor" : {
+            "type" : "boolean",
+            "title" : "Change border color?",
+            "description" : "If you want to change the color you can enable it here.\n",
+            "default" : false
+          },
+          "performTagValiation" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "tag" : {
+            "type" : "string",
+            "title" : "Applies to tag (single tag only)",
+            "description" : "Tag in your input table for which the formatting of this node should be applied to.\n",
+            "default" : "header"
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/allTags",
+      "options" : {
+        "format" : "checkbox"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/tag",
+      "providedOptions" : [ "validation.pattern" ],
+      "rule" : {
+        "effect" : "DISABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/allTags",
+          "schema" : {
+            "const" : true
+          }
+        }
+      }
+    }, {
+      "label" : "Border Style and Color",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/borderStyle",
+        "options" : {
+          "format" : "dropDown"
+        },
+        "providedOptions" : [ "possibleValues" ]
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/changeBorderColor",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/borderColor/properties/hexColorWithAlpha",
+        "options" : {
+          "validation" : {
+            "pattern" : {
+              "errorMessage" : "Invalid color format. Please provide a hex color in the format #RRGGBB or #RRGGBBAA.",
+              "parameters" : {
+                "pattern" : "^#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
+              }
+            }
+          }
+        },
+        "rule" : {
+          "effect" : "ENABLE",
+          "condition" : {
+            "scope" : "#/properties/model/properties/changeBorderColor",
+            "schema" : {
+              "const" : true
+            }
+          }
+        }
+      } ]
+    }, {
+      "label" : "Outer Border Settings",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/borderTop",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/borderLeft",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/borderRight",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/borderBottom",
+        "options" : {
+          "format" : "checkbox"
+        }
+      } ]
+    }, {
+      "label" : "Inner Border Settings",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/borderInnerVertical",
+        "options" : {
+          "format" : "checkbox"
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/borderInnerHorizontal",
+        "options" : {
+          "format" : "checkbox"
+        }
+      } ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "performTagValiation" : {
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "allTags" : {
+            "configKey" : "AllTags"
+          },
+          "tag" : {
+            "configKey" : "Tag"
+          },
+          "borderStyle" : {
+            "configPaths" : [ [ "BorderStyle" ] ]
+          },
+          "changeBorderColor" : {
+            "configKey" : "ChangeBorderColor"
+          },
+          "borderColor" : {
+            "type" : "object",
+            "properties" : {
+              "hexColorWithAlpha" : {
+                "configPaths" : [ [ "Red" ], [ "Green" ], [ "Blue" ], [ "Alpha" ] ]
+              }
+            },
+            "configKey" : "BorderColor"
+          },
+          "borderTop" : {
+            "configKey" : "BorderTop"
+          },
+          "borderLeft" : {
+            "configKey" : "BorderLeft"
+          },
+          "borderRight" : {
+            "configKey" : "BorderRight"
+          },
+          "borderBottom" : {
+            "configKey" : "BorderBottom"
+          },
+          "borderInnerVertical" : {
+            "configKey" : "BorderInnerVertical"
+          },
+          "borderInnerHorizontal" : {
+            "configKey" : "BorderInnerHorizontal"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/borderStyle",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "NORMAL",
+        "text" : "Normal"
+      }, {
+        "id" : "DOUBLE",
+        "text" : "Double"
+      }, {
+        "id" : "DASHED",
+        "text" : "Dashed"
+      }, {
+        "id" : "THICK",
+        "text" : "Thick"
+      }, {
+        "id" : "DASHED_THICK",
+        "text" : "Dashed_thick"
+      }, {
+        "id" : "EXTRA_THICK",
+        "text" : "Extra_thick"
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/performTagValiation",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : true
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "id" : "after-open-dialog"
+    },
+    "triggerInitially" : true,
+    "dependencies" : [ "#/properties/model/properties/tag" ]
+  }, {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/tag"
+    },
+    "dependencies" : [ "#/properties/model/properties/tag" ]
+  } ]
+}

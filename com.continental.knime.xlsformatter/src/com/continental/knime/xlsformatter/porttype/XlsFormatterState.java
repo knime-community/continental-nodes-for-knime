@@ -110,7 +110,23 @@ public class XlsFormatterState implements PortObject, Externalizable {
 	/**
 	 * Formatting style options of a border's edge.
 	 */
-	public enum BorderStyle { UNMODIFIED, NONE, NORMAL, DOUBLE, DASHED, THICK, DASHED_THICK, EXTRA_THICK }
+	public enum BorderStyle { 
+		@Label("Unmodified")
+		UNMODIFIED, 
+		@Label("None")
+		NONE, 
+		@Label("Normal")
+		NORMAL, 
+		@Label("Double")
+		DOUBLE, 
+		@Label("Dashed")
+		DASHED, 
+		@Label("Thick")
+		THICK, 
+		@Label("Dashed_thick")
+		DASHED_THICK, 
+		@Label("Extra_thick")
+		EXTRA_THICK }
 	
 	/**
 	 * Formatting options of a cell's background.

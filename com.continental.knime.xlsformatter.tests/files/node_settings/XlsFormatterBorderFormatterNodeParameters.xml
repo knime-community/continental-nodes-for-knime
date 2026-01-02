@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="settings.xml">
+    <entry key="node_file" type="xstring" value="settings.xml"/>
+    <config key="flow_stack"/>
+    <config key="internal_node_subsettings">
+        <entry key="memory_policy" type="xstring" value="CacheSmallInMemory"/>
+    </config>
+    <config key="model">
+        <config key="Tag_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="Tag" type="xstring" value="header"/>
+        <config key="AllTags_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="AllTags" type="xboolean" value="false"/>
+        <config key="BorderStyle_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="BorderStyle" type="xstring" value="normal"/>
+        <config key="ChangeBorderColor_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="ChangeBorderColor" type="xboolean" value="false"/>
+        <config key="BorderColor_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_color"/>
+            <entry key="EnabledStatus" type="xboolean" value="false"/>
+        </config>
+        <config key="BorderColor">
+            <entry key="Red" type="xint" value="0"/>
+            <entry key="Green" type="xint" value="0"/>
+            <entry key="Blue" type="xint" value="0"/>
+            <entry key="Alpha" type="xint" value="255"/>
+        </config>
+        <config key="BorderTop_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="BorderTop" type="xboolean" value="true"/>
+        <config key="BorderLeft_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="BorderLeft" type="xboolean" value="false"/>
+        <config key="BorderRight_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="BorderRight" type="xboolean" value="false"/>
+        <config key="BorderBottom_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="BorderBottom" type="xboolean" value="false"/>
+        <config key="BorderInnerVertical_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="BorderInnerVertical" type="xboolean" value="false"/>
+        <config key="BorderInnerHorizontal_Internals">
+            <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
+            <entry key="EnabledStatus" type="xboolean" value="true"/>
+        </config>
+        <entry key="BorderInnerHorizontal" type="xboolean" value="false"/>
+    </config>
+    <entry key="customDescription" type="xstring" isnull="true" value=""/>
+    <entry key="state" type="xstring" value="CONFIGURED"/>
+    <entry key="factory" type="xstring" value="com.continental.knime.xlsformatter.borderformatter.XlsFormatterBorderFormatterNodeFactory"/>
+    <entry key="node-name" type="xstring" value="XLS Border Formatter"/>
+    <entry key="node-bundle-name" type="xstring" value="XLS Formatting &amp;amp; Utilities"/>
+    <entry key="node-bundle-symbolic-name" type="xstring" value="com.continental.knime.xlsformatter"/>
+    <entry key="node-bundle-vendor" type="xstring" value="Continental"/>
+    <entry key="node-bundle-version" type="xstring" value="1.6.0.v202511121125"/>
+    <entry key="node-feature-name" type="xstring" value="XLS Formatting &amp; Utilities"/>
+    <entry key="node-feature-symbolic-name" type="xstring" value="com.continental.knime.feature.feature.group"/>
+    <entry key="node-feature-vendor" type="xstring" value="Continental"/>
+    <entry key="node-feature-version" type="xstring" value="1.6.0.v202511121125"/>
+    <config key="factory_settings"/>
+    <entry key="name" type="xstring" value="XLS Border Formatter"/>
+    <entry key="hasContent" type="xboolean" value="false"/>
+    <entry key="isInactive" type="xboolean" value="false"/>
+    <config key="ports">
+        <config key="port_1">
+            <entry key="index" type="xint" value="1"/>
+            <entry key="port_dir_location" type="xstring" isnull="true" value=""/>
+        </config>
+    </config>
+    <config key="filestores">
+        <entry key="file_store_location" type="xstring" isnull="true" value=""/>
+        <entry key="file_store_id" type="xstring" isnull="true" value=""/>
+    </config>
+</config>

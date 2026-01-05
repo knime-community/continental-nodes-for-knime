@@ -265,15 +265,15 @@ final class XlsFormatterCellFormatterNodeParameters extends PerformTagValidation
 		@Label("Unmodified")
 		UNMODIFIED("unmodified"), 
 		@Label("+90°")
-		PLUS_90("+90°"), 
+		PLUS_90("+90"), 
 		@Label("+45°")
-		PLUS_45("+45°"), 
+		PLUS_45("+45"), 
 		@Label("0°")
-		ZERO("0°"), 
+		ZERO("0"), 
 		@Label("-45°")
-		MINUS_45("-45°"), 
+		MINUS_45("-45"), 
 		@Label("-90°")
-		MINUS_90("-90°");
+		MINUS_90("-90");
 
 		private final String m_value;
 

@@ -48,6 +48,8 @@ package com.continental.knime.xlsformatter.cellformatter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
@@ -71,6 +73,7 @@ import org.knime.node.parameters.widget.choices.SuggestionsProvider;
 import org.knime.node.parameters.widget.text.TextInputWidget;
 
 import com.continental.knime.xlsformatter.cellformatter.XlsFormatterCellFormatterNodeModel.TextPresets;
+import com.continental.knime.xlsformatter.porttype.XlsFormatterState;
 import com.continental.knime.xlsformatter.porttype.XlsFormatterState.CellAlignmentHorizontal;
 import com.continental.knime.xlsformatter.porttype.XlsFormatterState.CellAlignmentVertical;
 import com.continental.knime.xlsformatter.porttype.XlsFormatterState.CellDataType;
@@ -202,20 +205,35 @@ final class XlsFormatterCellFormatterNodeParameters extends PerformTagValidation
 	
 	static final class TextRotationPersistor implements NodeParametersPersistor<TextRotation> {
 
-	    @Override
-	    public TextRotation load(final NodeSettingsRO settings) throws InvalidSettingsException {
-	        return TextRotation.getFromValue(
-	        		settings.getString(XlsFormatterCellFormatterNodeModel.CFGKEY_TEXTROTATION));
-	    }
+		@Override
+		public TextRotation load(final NodeSettingsRO settings) throws InvalidSettingsException {
+			return TextRotation.getFromValue(updateValueWithSpecificUnicodeCorrection(
+							settings.getString(XlsFormatterCellFormatterNodeModel.CFGKEY_TEXTROTATION)));
+		}
 
-	    @Override
-	    public void save(final TextRotation obj, final NodeSettingsWO settings) {
-	        settings.addString(XlsFormatterCellFormatterNodeModel.CFGKEY_TEXTROTATION, obj.toString());
-	    }
+		@Override
+		public void save(final TextRotation obj, final NodeSettingsWO settings) {
+			settings.addString(XlsFormatterCellFormatterNodeModel.CFGKEY_TEXTROTATION, obj.toString());
+		}
 
 		@Override
 		public String[][] getConfigPaths() {
-			return new String[][]{{XlsFormatterCellFormatterNodeModel.CFGKEY_TEXTROTATION}};
+			return new String[][] { { XlsFormatterCellFormatterNodeModel.CFGKEY_TEXTROTATION } };
+		}
+
+		/**
+		 * To be safe for cross-platform exchange of workflows, make sure the degree
+		 * sign (�) is read in correctly from the settings.xml file.
+		 */
+		private static String updateValueWithSpecificUnicodeCorrection(final String objString) {
+			if (!objString.equals(XlsFormatterState.FormattingFlag.UNMODIFIED.toString().toLowerCase())) {
+				final var regexPattern = Pattern.compile("^((?:\\+|-)?(?:[0-9]{1,2}))(.*?)$");
+				Matcher match = regexPattern.matcher(objString);
+				if (match.find())
+					if (match.group(2) != null && !match.group(2).equals("°"))
+						return match.group(1) + "°";
+			}
+			return objString;
 		}
 
 	}
@@ -265,15 +283,15 @@ final class XlsFormatterCellFormatterNodeParameters extends PerformTagValidation
 		@Label("Unmodified")
 		UNMODIFIED("unmodified"), 
 		@Label("+90°")
-		PLUS_90("+90"), 
+		PLUS_90("+90°"), 
 		@Label("+45°")
-		PLUS_45("+45"), 
+		PLUS_45("+45°"), 
 		@Label("0°")
-		ZERO("0"), 
+		ZERO("0°"), 
 		@Label("-45°")
-		MINUS_45("-45"), 
+		MINUS_45("-45°"), 
 		@Label("-90°")
-		MINUS_90("-90");
+		MINUS_90("-90°");
 
 		private final String m_value;
 

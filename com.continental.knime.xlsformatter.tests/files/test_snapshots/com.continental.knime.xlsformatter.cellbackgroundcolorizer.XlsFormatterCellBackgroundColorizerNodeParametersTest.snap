@@ -1,0 +1,379 @@
+{
+  "data" : {
+    "model" : {
+      "performTagValiation" : true,
+      "controlTableStyle" : "STANDARD_TAGS",
+      "tag" : "header",
+      "changeBackgroundColor" : true,
+      "backgroundColor" : {
+        "hexColorWithAlpha" : "#000000FF"
+      },
+      "backgroundPattern" : "UNMODIFIED",
+      "changeBackgroundPatternColor" : false,
+      "backgroundPatternColor" : {
+        "hexColorWithAlpha" : "#000000FF"
+      }
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "backgroundColor" : {
+            "type" : "object",
+            "properties" : {
+              "hexColorWithAlpha" : {
+                "type" : "string",
+                "title" : "Background color",
+                "description" : "Choose a color in hex format with optional alpha channel.",
+                "default" : "#000000FF"
+              }
+            },
+            "default" : {
+              "hexColorWithAlpha" : "#000000FF"
+            }
+          },
+          "backgroundPattern" : {
+            "oneOf" : [ {
+              "const" : "UNMODIFIED",
+              "title" : "Unmodified"
+            }, {
+              "const" : "NONE",
+              "title" : "None"
+            }, {
+              "const" : "SOLID_BACKGROUND_COLOR",
+              "title" : "Solid background color"
+            }, {
+              "const" : "DIAGONAL",
+              "title" : "Diagonal"
+            }, {
+              "const" : "HORIZONTAL",
+              "title" : "Horizontal"
+            }, {
+              "const" : "VERTICAL",
+              "title" : "Vertical"
+            }, {
+              "const" : "DOTTED",
+              "title" : "Dotted"
+            } ],
+            "title" : "Pattern fill",
+            "description" : "You can change the pattern fill for your selected tag here or leave it as is\n(e.g. unmodified, horizontal, diagonal, ...).\n",
+            "default" : "UNMODIFIED"
+          },
+          "backgroundPatternColor" : {
+            "type" : "object",
+            "properties" : {
+              "hexColorWithAlpha" : {
+                "type" : "string",
+                "title" : "Pattern color",
+                "description" : "Choose a color in hex format with optional alpha channel.",
+                "default" : "#000000FF"
+              }
+            },
+            "default" : {
+              "hexColorWithAlpha" : "#000000FF"
+            }
+          },
+          "changeBackgroundColor" : {
+            "type" : "boolean",
+            "title" : "Change background color",
+            "description" : "If you want to change the background color you can enable it here.\n",
+            "default" : true
+          },
+          "changeBackgroundPatternColor" : {
+            "type" : "boolean",
+            "title" : "Change pattern color",
+            "description" : "If you want to change the pattern fill color you can enable it here.\n",
+            "default" : false
+          },
+          "controlTableStyle" : {
+            "oneOf" : [ {
+              "const" : "STANDARD_TAGS",
+              "title" : "Standard tags"
+            }, {
+              "const" : "DIRECT_RGB",
+              "title" : "Direct color codes in RGB format"
+            } ],
+            "title" : "Control table style",
+            "description" : "Choose the control table style: Either use a tag to define your background color (standard tags)\nor use RGB color codes in your control table (e.g. 255/0/255 or #FF00FF).\n",
+            "default" : "STANDARD_TAGS"
+          },
+          "performTagValiation" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "tag" : {
+            "type" : "string",
+            "title" : "Applies to tag (single tag only)",
+            "description" : "Tag in your input table for which the formatting of this node should be applied to.\n",
+            "default" : "header"
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/controlTableStyle",
+      "options" : {
+        "format" : "radio",
+        "radioLayout" : "vertical"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/tag",
+      "providedOptions" : [ "validation.pattern" ],
+      "rule" : {
+        "effect" : "ENABLE",
+        "condition" : {
+          "scope" : "#/properties/model/properties/controlTableStyle",
+          "schema" : {
+            "oneOf" : [ {
+              "const" : "STANDARD_TAGS"
+            } ]
+          }
+        }
+      }
+    }, {
+      "label" : "Background Color",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/changeBackgroundColor",
+        "options" : {
+          "format" : "checkbox"
+        },
+        "rule" : {
+          "effect" : "ENABLE",
+          "condition" : {
+            "scope" : "#/properties/model/properties/controlTableStyle",
+            "schema" : {
+              "oneOf" : [ {
+                "const" : "STANDARD_TAGS"
+              } ]
+            }
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/backgroundColor/properties/hexColorWithAlpha",
+        "options" : {
+          "validation" : {
+            "pattern" : {
+              "errorMessage" : "Invalid color format. Please provide a hex color in the format #RRGGBB or #RRGGBBAA.",
+              "parameters" : {
+                "pattern" : "^#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
+              }
+            }
+          }
+        },
+        "rule" : {
+          "effect" : "ENABLE",
+          "condition" : {
+            "type" : "AND",
+            "conditions" : [ {
+              "scope" : "#/properties/model/properties/controlTableStyle",
+              "schema" : {
+                "oneOf" : [ {
+                  "const" : "STANDARD_TAGS"
+                } ]
+              }
+            }, {
+              "scope" : "#/properties/model/properties/changeBackgroundColor",
+              "schema" : {
+                "const" : true
+              }
+            } ]
+          }
+        }
+      } ]
+    }, {
+      "label" : "Pattern Fill",
+      "type" : "Section",
+      "elements" : [ {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/backgroundPattern",
+        "options" : {
+          "format" : "dropDown"
+        },
+        "providedOptions" : [ "possibleValues" ],
+        "rule" : {
+          "effect" : "ENABLE",
+          "condition" : {
+            "scope" : "#/properties/model/properties/controlTableStyle",
+            "schema" : {
+              "oneOf" : [ {
+                "const" : "STANDARD_TAGS"
+              } ]
+            }
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/changeBackgroundPatternColor",
+        "options" : {
+          "format" : "checkbox"
+        },
+        "rule" : {
+          "effect" : "ENABLE",
+          "condition" : {
+            "type" : "AND",
+            "conditions" : [ {
+              "scope" : "#/properties/model/properties/backgroundPattern",
+              "schema" : {
+                "not" : {
+                  "oneOf" : [ {
+                    "const" : "UNMODIFIED"
+                  } ]
+                }
+              }
+            }, {
+              "scope" : "#/properties/model/properties/controlTableStyle",
+              "schema" : {
+                "oneOf" : [ {
+                  "const" : "STANDARD_TAGS"
+                } ]
+              }
+            } ]
+          }
+        }
+      }, {
+        "type" : "Control",
+        "scope" : "#/properties/model/properties/backgroundPatternColor/properties/hexColorWithAlpha",
+        "options" : {
+          "validation" : {
+            "pattern" : {
+              "errorMessage" : "Invalid color format. Please provide a hex color in the format #RRGGBB or #RRGGBBAA.",
+              "parameters" : {
+                "pattern" : "^#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
+              }
+            }
+          }
+        },
+        "rule" : {
+          "effect" : "ENABLE",
+          "condition" : {
+            "type" : "AND",
+            "conditions" : [ {
+              "type" : "AND",
+              "conditions" : [ {
+                "scope" : "#/properties/model/properties/backgroundPattern",
+                "schema" : {
+                  "not" : {
+                    "oneOf" : [ {
+                      "const" : "UNMODIFIED"
+                    } ]
+                  }
+                }
+              }, {
+                "scope" : "#/properties/model/properties/controlTableStyle",
+                "schema" : {
+                  "oneOf" : [ {
+                    "const" : "STANDARD_TAGS"
+                  } ]
+                }
+              } ]
+            }, {
+              "scope" : "#/properties/model/properties/changeBackgroundPatternColor",
+              "schema" : {
+                "const" : true
+              }
+            } ]
+          }
+        }
+      } ]
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "performTagValiation" : {
+            "deprecatedConfigKeys" : [ {
+              "deprecated" : [ ]
+            } ]
+          },
+          "controlTableStyle" : {
+            "configPaths" : [ [ "ControlTableStyle" ] ]
+          },
+          "tag" : {
+            "configKey" : "Tag"
+          },
+          "changeBackgroundColor" : {
+            "configKey" : "BackGroundColorSelection"
+          },
+          "backgroundColor" : {
+            "type" : "object",
+            "properties" : {
+              "hexColorWithAlpha" : {
+                "configPaths" : [ [ "Red" ], [ "Green" ], [ "Blue" ], [ "Alpha" ] ]
+              }
+            },
+            "configKey" : "BackGroundColor"
+          },
+          "backgroundPattern" : {
+            "configPaths" : [ [ "BackGroundPatternSelection" ] ]
+          },
+          "changeBackgroundPatternColor" : {
+            "configKey" : "BackGroundPatternColorSelection"
+          },
+          "backgroundPatternColor" : {
+            "type" : "object",
+            "properties" : {
+              "hexColorWithAlpha" : {
+                "configPaths" : [ [ "Red" ], [ "Green" ], [ "Blue" ], [ "Alpha" ] ]
+              }
+            },
+            "configKey" : "BackGroundPatternColor"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/backgroundPattern",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "UNMODIFIED",
+        "text" : "Unmodified"
+      }, {
+        "id" : "DIAGONAL",
+        "text" : "Diagonal"
+      }, {
+        "id" : "HORIZONTAL",
+        "text" : "Horizontal"
+      }, {
+        "id" : "VERTICAL",
+        "text" : "Vertical"
+      }, {
+        "id" : "DOTTED",
+        "text" : "Dotted"
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/performTagValiation",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : true
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "id" : "after-open-dialog"
+    },
+    "triggerInitially" : true,
+    "dependencies" : [ "#/properties/model/properties/tag" ]
+  }, {
+    "trigger" : {
+      "scope" : "#/properties/model/properties/tag"
+    },
+    "dependencies" : [ "#/properties/model/properties/tag" ]
+  } ]
+}

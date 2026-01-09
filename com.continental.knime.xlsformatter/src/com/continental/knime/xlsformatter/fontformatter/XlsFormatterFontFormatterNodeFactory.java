@@ -21,47 +21,127 @@ package com.continental.knime.xlsformatter.fontformatter;
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+import org.knime.core.webui.node.dialog.NodeDialog;
+import org.knime.core.webui.node.dialog.NodeDialogFactory;
+import org.knime.core.webui.node.dialog.NodeDialogManager;
+import org.knime.core.webui.node.dialog.SettingsType;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
+import org.knime.core.webui.node.dialog.defaultdialog.DefaultKaiNodeInterface;
+import org.knime.core.webui.node.dialog.kai.KaiNodeInterface;
+import org.knime.core.webui.node.dialog.kai.KaiNodeInterfaceFactory;
+import org.knime.core.node.NodeDescription;
+import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
+import java.util.Map;
+import org.knime.node.impl.description.PortDescription;
+import java.util.List;
+import static org.knime.node.impl.description.PortDescription.fixedPort;
 
-public class XlsFormatterFontFormatterNodeFactory extends NodeFactory<XlsFormatterFontFormatterNodeModel> {
+import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil;
 
-	/**
-	 * {@inheritDoc}
-	 */
+@SuppressWarnings("restriction")
+public class XlsFormatterFontFormatterNodeFactory extends NodeFactory<XlsFormatterFontFormatterNodeModel> 
+	implements NodeDialogFactory, KaiNodeInterfaceFactory {
+
 	@Override
 	public XlsFormatterFontFormatterNodeModel createNodeModel() {
 		return new XlsFormatterFontFormatterNodeModel();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int getNrNodeViews() {
 		return 0;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public NodeView<XlsFormatterFontFormatterNodeModel> createNodeView(final int viewIndex,
 			final XlsFormatterFontFormatterNodeModel nodeModel) {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean hasDialog() {
 		return true;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
-	public NodeDialogPane createNodeDialogPane() {
-		return new XlsFormatterFontFormatterNodeDialog();
+	public boolean hasNodeDialog() {
+		return XlsFormatterNodeParameterUtil.HAS_WEBUI_DIALOG;
 	}
+
+    private static final String NODE_NAME = "XLS Font Formatter";
+    
+    private static final String NODE_ICON = "./fontformatter.png";
+    
+    private static final String SHORT_DESCRIPTION = """
+            The XLS Font Formatter node changes font properties of the text for selected cells, such as bold,
+                italic, underline, size, and color.
+            """;
+    
+    private static final String FULL_DESCRIPTION = """
+            The XLS Font Formatter node changes font properties of the text for selected cells, such as bold,
+                italic, underline, size, and color.<p /> This node defines a formatting instruction only which needs to
+                be written to an xlsx file via the <i>XLS Formatter (apply)</i> node subsequently.
+            """;
+    
+    private static final List<PortDescription> INPUT_PORTS = List.of(
+            fixedPort("Control Table", """
+                XLS Control Table holding tags that define which cells of the sheet to format.
+                """),
+            fixedPort("Optional XLS Formatter", """
+                The XLS Formatter input port potentially holding previous formatting instructions that the instructions
+                of this node shall be added to.
+                """)
+    );
+    
+    private static final List<PortDescription> OUTPUT_PORTS = List.of(
+            fixedPort("XLS Formatter", """
+                The XLS Formatter output port holding the collected formatting instructions including the added
+                formatting information from this node.
+                """)
+    );
+
+    /**
+     * {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public NodeDialogPane createNodeDialogPane() {
+    	if (XlsFormatterNodeParameterUtil.HAS_WEBUI_DIALOG) {
+    		return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+		}
+    	return new XlsFormatterFontFormatterNodeDialog();
+    }
+
+    @Override
+    public NodeDialog createNodeDialog() {
+        return new DefaultNodeDialog(SettingsType.MODEL, XlsFormatterFontFormatterNodeParameters.class);
+    }
+
+    @Override
+    public NodeDescription createNodeDescription() {
+        return DefaultNodeDescriptionUtil.createNodeDescription( //
+            NODE_NAME, //
+            NODE_ICON, //
+            INPUT_PORTS, //
+            OUTPUT_PORTS, //
+            SHORT_DESCRIPTION, //
+            FULL_DESCRIPTION, //
+            List.of(), //
+            XlsFormatterFontFormatterNodeParameters.class, //
+            null, //
+            NodeType.Manipulator, //
+            List.of(), //
+            null //
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public KaiNodeInterface createKaiNodeInterface() {
+        return new DefaultKaiNodeInterface(Map.of(SettingsType.MODEL, XlsFormatterFontFormatterNodeParameters.class));
+    }
+    
 }

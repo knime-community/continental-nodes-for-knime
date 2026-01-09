@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="test">
+    <entry key="performTagValiation" type="xboolean" value="false"/>
+    <entry key="ControlTableStyle" type="xstring" value="standard tags"/>
+    <entry key="Tag" type="xstring" value="header"/>
+    <entry key="BackGroundColorSelection" type="xboolean" value="true"/>
+    <config key="BackGroundColor">
+        <entry key="Red" type="xint" value="255"/>
+        <entry key="Green" type="xint" value="255"/>
+        <entry key="Blue" type="xint" value="0"/>
+        <entry key="Alpha" type="xint" value="255"/>
+    </config>
+    <entry key="BackGroundPatternSelection" type="xstring" value="unmodified"/>
+    <entry key="BackGroundPatternColorSelection" type="xboolean" value="false"/>
+    <config key="BackGroundPatternColor">
+        <entry key="Red" type="xint" value="0"/>
+        <entry key="Green" type="xint" value="0"/>
+        <entry key="Blue" type="xint" value="0"/>
+        <entry key="Alpha" type="xint" value="255"/>
+    </config>
+</config>

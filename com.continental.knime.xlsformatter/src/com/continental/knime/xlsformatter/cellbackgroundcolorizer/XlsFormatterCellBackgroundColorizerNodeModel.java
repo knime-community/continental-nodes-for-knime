@@ -45,6 +45,7 @@ import org.knime.core.node.port.PortType;
 import com.continental.knime.xlsformatter.commons.AddressingTools;
 import com.continental.knime.xlsformatter.commons.ColorTools;
 import com.continental.knime.xlsformatter.commons.TagBasedXlsCellFormatterNodeModel;
+import com.continental.knime.xlsformatter.commons.UiValidation;
 import com.continental.knime.xlsformatter.commons.WarningMessageContainer;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableAnalysisTools;
 import com.continental.knime.xlsformatter.commons.XlsFormatterControlTableValidator;
@@ -289,6 +290,9 @@ public class XlsFormatterCellBackgroundColorizerNodeModel extends TagBasedXlsCel
 		m_backgroundPattern.validateSettings(settings);
 		m_changeBackgroundColor.validateSettings(settings);
 
+		if (settings.getBoolean("performTagValiation", false)) {
+			UiValidation.validateTagString(settings.getString(CFGKEY_TAGSTRING));
+	    }
 
 	}
 

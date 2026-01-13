@@ -1,0 +1,151 @@
+{
+  "data" : {
+    "model" : {
+      "queueMode" : "FIFO",
+      "groupingColumn" : "Cluster Membership",
+      "quantityColumn" : "Universe_0_0",
+      "failAtInconsistency" : false
+    }
+  },
+  "schema" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "failAtInconsistency" : {
+            "type" : "boolean",
+            "title" : "Fail at queuing inconsistency",
+            "description" : "If checked, an inconsistent queue history will lead to an error in node execution. The only inconsistency\nanalyzed is higher total outflow quantity than prior inflow quantity. E.g. a queue history of 2, 2, -5, 3\nwould trigger this, because the outflowing 5 are exceeding the 4 pieces in the queue at that moment. If\nunchecked, the queue resolution will add a missing value in the RowId_IN output column.\n",
+            "default" : false
+          },
+          "groupingColumn" : {
+            "type" : "string",
+            "title" : "Grouping column",
+            "description" : "Name of the input table column used for grouping. Per unique value in this column, queues are analyzed\nindependently. E.g. use a material number column here for a logistics use case.\n"
+          },
+          "quantityColumn" : {
+            "type" : "string",
+            "title" : "Quantity column",
+            "description" : "Name of the input table column that holds the quantity of each operation. E.g. use a 'number of stocks'\ncolumn here for a finance/tax use case.\n"
+          },
+          "queueMode" : {
+            "oneOf" : [ {
+              "const" : "FIFO",
+              "title" : "FIFO"
+            }, {
+              "const" : "LIFO",
+              "title" : "LIFO"
+            } ],
+            "title" : "Queue resolution mode",
+            "description" : "Choose one of the queue resolution modes 'first-in-first-out' (FIFO) or 'last-in-first-out' (LIFO).\n\n<ul>\n<li><b>FIFO</b>: The queue is analyzed as if the first-in-first-out principle was applied, e.g. a supermarket queue.\n</li>\n<li><b>LIFO</b>: The queue is analyzed as if the last-in-first-out principle was applied, e.g. a box that can only be\nfilled and emptied from one side.\n</li>\n</ul>",
+            "default" : "FIFO"
+          }
+        }
+      }
+    }
+  },
+  "ui_schema" : {
+    "elements" : [ {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/queueMode",
+      "options" : {
+        "format" : "valueSwitch"
+      }
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/groupingColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/quantityColumn",
+      "options" : {
+        "format" : "dropDown"
+      },
+      "providedOptions" : [ "possibleValues" ]
+    }, {
+      "type" : "Control",
+      "scope" : "#/properties/model/properties/failAtInconsistency",
+      "options" : {
+        "format" : "checkbox"
+      }
+    } ]
+  },
+  "persist" : {
+    "type" : "object",
+    "properties" : {
+      "model" : {
+        "type" : "object",
+        "properties" : {
+          "queueMode" : {
+            "configPaths" : [ [ "QueueMode" ] ]
+          },
+          "groupingColumn" : {
+            "configPaths" : [ [ "columnName" ] ],
+            "route" : [ "GroupCol" ]
+          },
+          "quantityColumn" : {
+            "configPaths" : [ [ "columnName" ] ],
+            "route" : [ "QtyCol" ]
+          },
+          "failAtInconsistency" : {
+            "configKey" : "FailAtInconsistency"
+          }
+        }
+      }
+    }
+  },
+  "initialUpdates" : [ {
+    "scope" : "#/properties/model/properties/groupingColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Cluster Membership",
+        "text" : "Cluster Membership",
+        "type" : {
+          "id" : "org.knime.core.data.StringValue",
+          "text" : "String"
+        }
+      }, {
+        "id" : "Other String Column",
+        "text" : "Other String Column",
+        "type" : {
+          "id" : "org.knime.core.data.StringValue",
+          "text" : "String"
+        }
+      } ]
+    } ]
+  }, {
+    "scope" : "#/properties/model/properties/quantityColumn",
+    "providedOptionName" : "possibleValues",
+    "values" : [ {
+      "indices" : [ ],
+      "value" : [ {
+        "id" : "Universe_0_0",
+        "text" : "Universe_0_0",
+        "type" : {
+          "id" : "org.knime.core.data.DoubleValue",
+          "text" : "Number (Float)"
+        }
+      }, {
+        "id" : "Other Double Column",
+        "text" : "Other Double Column",
+        "type" : {
+          "id" : "org.knime.core.data.DoubleValue",
+          "text" : "Number (Float)"
+        }
+      } ]
+    } ]
+  } ],
+  "globalUpdates" : [ {
+    "trigger" : {
+      "id" : "after-open-dialog"
+    },
+    "triggerInitially" : true,
+    "dependencies" : [ "#/properties/model/properties/groupingColumn", "#/properties/model/properties/quantityColumn" ]
+  } ]
+}

@@ -172,12 +172,14 @@ public class FifoResolverNodeModel extends NodeModel {
 			throws InvalidSettingsException {
 
 		m_mode.validateSettings(settings);
-		m_inputColumnNameGroup.validateSettings(settings);
-		m_inputColumnNameQty.validateSettings(settings);
+		m_inputColumnNameGroup.loadSettingsFrom(settings);
+		m_inputColumnNameQty.loadSettingsFrom(settings);
 		m_failAtInconsistency.validateSettings(settings);
 
-		if (m_inputColumnNameGroup.getStringValue().equals(m_inputColumnNameQty.getStringValue()))
-			throw new InvalidSettingsException("Two different input columns need to be selected.");
+		if (m_inputColumnNameGroup.getStringValue() != null && m_inputColumnNameQty.getStringValue() != null) {
+			if (m_inputColumnNameGroup.getStringValue().equals(m_inputColumnNameQty.getStringValue()))
+				throw new InvalidSettingsException("Two different input columns need to be selected.");
+		}
 	}
 
 	/**

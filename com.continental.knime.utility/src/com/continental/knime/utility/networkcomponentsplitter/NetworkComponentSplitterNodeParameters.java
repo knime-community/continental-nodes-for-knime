@@ -75,6 +75,8 @@ import org.knime.node.parameters.widget.choices.util.CompatibleColumnsProvider.S
 import org.knime.node.parameters.widget.text.TextInputWidget;
 import org.knime.node.parameters.widget.text.TextInputWidgetValidation.PatternValidation.IsNotBlankValidation;
 
+import com.continental.knime.utility.NodeParameterUtil.LegacyColumnNamePersistor;
+
 import static com.continental.knime.utility.networkcomponentsplitter.NetworkComponentSplitterNodeModel.CFGKEY_COLUM_NAME1;
 import static com.continental.knime.utility.networkcomponentsplitter.NetworkComponentSplitterNodeModel.CFGKEY_COLUMN_NAME2;
 import static com.continental.knime.utility.networkcomponentsplitter.NetworkComponentSplitterNodeModel.CFGKEY_MISSING;
@@ -243,7 +245,7 @@ final class NetworkComponentSplitterNodeParameters implements NodeParameters {
         
     }
     
-    static final class InputColumn1Persistor extends InputColumnPersistor {
+    static final class InputColumn1Persistor extends LegacyColumnNamePersistor {
 
 		protected InputColumn1Persistor() {
 			super(NetworkComponentSplitterNodeModel.DEFAULT_COLUMN_NAME1);
@@ -251,44 +253,12 @@ final class NetworkComponentSplitterNodeParameters implements NodeParameters {
     	
     }
     
-    static final class InputColumn2Persistor extends InputColumnPersistor {
+    static final class InputColumn2Persistor extends LegacyColumnNamePersistor {
 
 		protected InputColumn2Persistor() {
 			super(NetworkComponentSplitterNodeModel.DEFAULT_COLUMN_NAME2);
 		}
     	
-    }
-    
-    /**
-     * Classic dialog had possibility to select RowID, but RowID could not be applied, so we changed to string and load 
-     * null if the default is currently selected to have a nice state if no columns are available for selection 
-     * (we have no values present instead of (MISSING) <m_columnNameDefault>)
-     */
-    abstract static class InputColumnPersistor implements NodeParametersPersistor<String> {
-
-    	private String m_columnNameDefault;
-    	
-    	protected InputColumnPersistor(final String columnNameDefault) {
-			m_columnNameDefault = columnNameDefault;
-    	}
-    	
-        @Override
-        public String load(final NodeSettingsRO settings) throws InvalidSettingsException {
-        	final var columnName = settings.getString("columnName");
-        	return columnName == m_columnNameDefault ? null : columnName;
-        }
-
-		@Override
-		public void save(final String param, final NodeSettingsWO settings) {
-			settings.addBoolean("useRowID", false);
-			settings.addString("columnName", param == null ? m_columnNameDefault : param);
-		}
-
-        @Override
-        public String[][] getConfigPaths() {
-            return new String[][]{{"columnName"}};
-        }
-        
     }
     
 }

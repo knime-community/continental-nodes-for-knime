@@ -20,7 +20,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.knime.base.filehandling;bundle-version="[5.3.0,6.0.0)",
  org.knime.filehandling.core;bundle-version="[5.3.0,6.0.0)",
  org.knime.datageneration;bundle-version="[5.3.0,6.0.0)",
- org.knime.core.ui;bundle-version="[5.10.0,6.0.0)"
+ org.knime.core.ui;bundle-version="[5.9.0,6.0.0)"
 Bundle-ActivationPolicy: lazy
 Export-Package: com.continental.knime.xlsformatter.apply,
  com.continental.knime.xlsformatter.borderformatter,

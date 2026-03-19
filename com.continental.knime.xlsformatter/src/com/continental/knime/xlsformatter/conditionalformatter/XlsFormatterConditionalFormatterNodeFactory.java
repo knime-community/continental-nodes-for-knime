@@ -30,8 +30,6 @@ import org.knime.core.node.NodeDescription;
 import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
 import org.knime.node.impl.description.PortDescription;
 
-import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil;
-
 import java.util.List;
 import static org.knime.node.impl.description.PortDescription.fixedPort;
 
@@ -62,7 +60,7 @@ implements NodeDialogFactory {
 	
 	@Override
 	public boolean hasNodeDialog() {
-		return XlsFormatterNodeParameterUtil.HAS_WEBUI_DIALOG;
+		return true;
 	}
 
     private static final String NODE_NAME = "XLS Conditional Formatter";
@@ -101,13 +99,10 @@ implements NodeDialogFactory {
      * {@inheritDoc}
      * @since 1.7
      */
-    @Override
-    public NodeDialogPane createNodeDialogPane() {
-    	if (XlsFormatterNodeParameterUtil.HAS_WEBUI_DIALOG) {
-			return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
-		}
-    	return new XlsFormatterConditionalFormatterNodeDialog();
-    }
+	@Override
+	public NodeDialogPane createNodeDialogPane() {
+		return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+	}
 
     @Override
     public NodeDialog createNodeDialog() {

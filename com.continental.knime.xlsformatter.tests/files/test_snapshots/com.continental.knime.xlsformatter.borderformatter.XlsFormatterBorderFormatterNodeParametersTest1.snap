@@ -6,9 +6,7 @@
       "tag" : "header",
       "borderStyle" : "NORMAL",
       "changeBorderColor" : false,
-      "borderColor" : {
-        "hexColorWithAlpha" : "#000000"
-      },
+      "borderColor" : "#000000",
       "borderTop" : true,
       "borderLeft" : false,
       "borderRight" : false,
@@ -36,18 +34,10 @@
             "default" : false
           },
           "borderColor" : {
-            "type" : "object",
-            "properties" : {
-              "hexColorWithAlpha" : {
-                "type" : "string",
-                "title" : "Color",
-                "description" : "Choose a color in hex format with optional alpha channel.",
-                "default" : "#000000FF"
-              }
-            },
-            "default" : {
-              "hexColorWithAlpha" : "#000000FF"
-            }
+            "type" : "string",
+            "title" : "Border color",
+            "description" : "Select the border color.",
+            "default" : "#000000"
           },
           "borderInnerHorizontal" : {
             "type" : "boolean",
@@ -167,16 +157,9 @@
         }
       }, {
         "type" : "Control",
-        "scope" : "#/properties/model/properties/borderColor/properties/hexColorWithAlpha",
+        "scope" : "#/properties/model/properties/borderColor",
         "options" : {
-          "validation" : {
-            "pattern" : {
-              "errorMessage" : "Invalid color format. Please provide a hex color in the format #RRGGBB or #RRGGBBAA.",
-              "parameters" : {
-                "pattern" : "^#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
-              }
-            }
-          }
+          "format" : "color"
         },
         "rule" : {
           "effect" : "ENABLE",
@@ -258,13 +241,8 @@
             "configKey" : "ChangeBorderColor"
           },
           "borderColor" : {
-            "type" : "object",
-            "properties" : {
-              "hexColorWithAlpha" : {
-                "configPaths" : [ [ "Red" ], [ "Green" ], [ "Blue" ], [ "Alpha" ] ]
-              }
-            },
-            "configKey" : "BorderColor"
+            "configPaths" : [ [ "Red" ], [ "Green" ], [ "Blue" ], [ "Alpha" ] ],
+            "route" : [ "BorderColor" ]
           },
           "borderTop" : {
             "configKey" : "BorderTop"

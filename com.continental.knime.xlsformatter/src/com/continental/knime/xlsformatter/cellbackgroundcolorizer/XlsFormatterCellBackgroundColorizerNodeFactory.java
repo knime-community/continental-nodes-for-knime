@@ -36,8 +36,6 @@ import org.knime.node.impl.description.PortDescription;
 import java.util.List;
 import static org.knime.node.impl.description.PortDescription.fixedPort;
 
-import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil;
-
 /**
  * This is the factory class for the "XLS Background Colorizer" Node.
  * 
@@ -71,7 +69,7 @@ public class XlsFormatterCellBackgroundColorizerNodeFactory
 	
 	@Override
 	public boolean hasNodeDialog() {
-		return XlsFormatterNodeParameterUtil.HAS_WEBUI_DIALOG;
+		return true;
 	}
 
     private static final String NODE_NAME = "XLS Background Colorizer";
@@ -119,13 +117,10 @@ public class XlsFormatterCellBackgroundColorizerNodeFactory
      * {@inheritDoc}
      * @since 1.7
      */
-    @Override
-    public NodeDialogPane createNodeDialogPane() {
-    	if (XlsFormatterNodeParameterUtil.HAS_WEBUI_DIALOG) {
-    		return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
-		}
-    	return new XlsFormatterCellBackgroundColorizerNodeDialog();
-    }
+	@Override
+	public NodeDialogPane createNodeDialogPane() {
+		return NodeDialogManager.createLegacyFlowVariableNodeDialog(createNodeDialog());
+	}
 
     @Override
     public NodeDialog createNodeDialog() {

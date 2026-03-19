@@ -47,9 +47,10 @@
 package com.continental.knime.xlsformatter.conditionalformatter;
 
 
+import java.awt.Color;
 import java.util.function.Supplier;
 
-import org.knime.core.webui.node.dialog.defaultdialog.widget.Modification;
+import org.knime.core.webui.node.dialog.defaultdialog.internal.widget.PersistWithin;
 import org.knime.node.parameters.NodeParametersInput;
 import org.knime.node.parameters.Widget;
 import org.knime.node.parameters.layout.After;
@@ -58,6 +59,7 @@ import org.knime.node.parameters.layout.Layout;
 import org.knime.node.parameters.layout.Section;
 import org.knime.node.parameters.migration.LoadDefaultsForAbsentFields;
 import org.knime.node.parameters.persistence.Persist;
+import org.knime.node.parameters.persistence.Persistor;
 import org.knime.node.parameters.updates.Effect;
 import org.knime.node.parameters.updates.Effect.EffectType;
 import org.knime.node.parameters.updates.ParameterReference;
@@ -70,7 +72,7 @@ import org.knime.node.parameters.widget.text.TextInputWidget;
 
 import com.continental.knime.xlsformatter.util.PerformTagValidationParameter;
 import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil;
-import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil.LegacyColorNodeParameters;
+import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil.LegacyColorPersistor;
 
 /**
  * Node parameters for XLS Conditional Formatter.
@@ -144,17 +146,9 @@ final class XlsFormatterConditionalFormatterNodeParameters extends PerformTagVal
     @Widget(title = "Min color", description = """
     		Select the color using the color pane.
     		""")
-    @Persist(configKey = XlsFormatterConditionalFormatterNodeModel.CFGKEY_MIN_COLOR)
-    @Modification(MinColorModification.class)
-    LegacyColorNodeParameters m_minColor = new LegacyColorNodeParameters();
-
-    static final class MinColorModification extends LegacyColorNodeParameters.LegacyColorModification {
-
-		protected MinColorModification() {
-			super("Min color");
-		}
-    	
-	}
+    @PersistWithin(XlsFormatterConditionalFormatterNodeModel.CFGKEY_MIN_COLOR)
+    @Persistor(MinColorPersistor.class)
+    Color m_minColor = Color.GREEN;
     
     @Layout(ConditionalFormattingSettingsSection.MidFormattingSection.class)
     @Widget(title = "Mid", description = """
@@ -173,19 +167,11 @@ final class XlsFormatterConditionalFormatterNodeParameters extends PerformTagVal
     @Widget(title = "Mid color", description = """
     		Select the color using the color pane.
     		""")
-    @Persist(configKey = XlsFormatterConditionalFormatterNodeModel.CFGKEY_MID_COLOR)
+    @PersistWithin(XlsFormatterConditionalFormatterNodeModel.CFGKEY_MID_COLOR)
+    @Persistor(MidColorPersistor.class)
     @Effect(predicate = IsMidScalePointEnabled.class, type = EffectType.ENABLE)
-    @Modification(MidColorModification.class)
-    LegacyColorNodeParameters m_midColor = new LegacyColorNodeParameters();
+    Color m_midColor = Color.YELLOW;
     
-    static final class MidColorModification extends LegacyColorNodeParameters.LegacyColorModification {
-
-		protected MidColorModification() {
-			super("Mid color");
-		}
-    	
-    }
-
     @Layout(ConditionalFormattingSettingsSection.MaxFormattingSection.class)
     @Widget(title = "Max", description = """
     		Set the upper bound for the coloring in the conditional formatter. The corresponding color will 
@@ -203,17 +189,9 @@ final class XlsFormatterConditionalFormatterNodeParameters extends PerformTagVal
     @Widget(title = "Max color", description = """
     		Select the color using the color pane.
     		""")
-    @Persist(configKey = XlsFormatterConditionalFormatterNodeModel.CFGKEY_MAX_COLOR)
-    @Modification(MaxColorModification.class)
-    LegacyColorNodeParameters m_maxColor = new LegacyColorNodeParameters();
-
-    static final class MaxColorModification extends LegacyColorNodeParameters.LegacyColorModification {
-
-		protected MaxColorModification() {
-			super("Max color");
-		}
-    	
-    }
+    @PersistWithin(XlsFormatterConditionalFormatterNodeModel.CFGKEY_MAX_COLOR)
+    @Persistor(MaxColorPersistor.class)
+    Color m_maxColor = Color.RED;
     
     static final class TagValidationProvider extends XlsFormatterNodeParameterUtil.XlsTagValidationProvider {
 
@@ -221,7 +199,7 @@ final class XlsFormatterConditionalFormatterNodeParameters extends PerformTagVal
             super(TagRef.class);
         }
         
-    }
+	}
     
     static final class MinIsSmallerThanMaxOrMidValidation implements StateProvider<MaxValidation> {
 
@@ -294,5 +272,29 @@ final class XlsFormatterConditionalFormatterNodeParameters extends PerformTagVal
         }
 
     }
+    
+	static final class MinColorPersistor extends LegacyColorPersistor {
+
+		MinColorPersistor() {
+			super(Color.GREEN);
+		}
+
+	}
+
+	static final class MidColorPersistor extends LegacyColorPersistor {
+
+		MidColorPersistor() {
+			super(Color.YELLOW);
+		}
+
+	}
+
+	static final class MaxColorPersistor extends LegacyColorPersistor {
+
+		MaxColorPersistor() {
+			super(Color.RED);
+		}
+
+	}
     
 }

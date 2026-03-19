@@ -9,9 +9,7 @@
       "changeFontSize" : false,
       "size" : 12,
       "changeColor" : false,
-      "fontColor" : {
-        "hexColorWithAlpha" : "#000000"
-      }
+      "fontColor" : "#000000"
     }
   },
   "schema" : {
@@ -39,18 +37,10 @@
             "default" : false
           },
           "fontColor" : {
-            "type" : "object",
-            "properties" : {
-              "hexColorWithAlpha" : {
-                "type" : "string",
-                "title" : "Color",
-                "description" : "Choose a color in hex format with optional alpha channel.",
-                "default" : "#000000FF"
-              }
-            },
-            "default" : {
-              "hexColorWithAlpha" : "#000000FF"
-            }
+            "type" : "string",
+            "title" : "Color",
+            "description" : "Define a color assigned to the font.",
+            "default" : "#000000"
           },
           "italic" : {
             "type" : "boolean",
@@ -155,16 +145,9 @@
         }
       }, {
         "type" : "Control",
-        "scope" : "#/properties/model/properties/fontColor/properties/hexColorWithAlpha",
+        "scope" : "#/properties/model/properties/fontColor",
         "options" : {
-          "validation" : {
-            "pattern" : {
-              "errorMessage" : "Invalid color format. Please provide a hex color in the format #RRGGBB or #RRGGBBAA.",
-              "parameters" : {
-                "pattern" : "^#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
-              }
-            }
-          }
+          "format" : "color"
         },
         "rule" : {
           "effect" : "ENABLE",
@@ -211,13 +194,8 @@
             "configKey" : "ChangeColor"
           },
           "fontColor" : {
-            "type" : "object",
-            "properties" : {
-              "hexColorWithAlpha" : {
-                "configPaths" : [ [ "Red" ], [ "Green" ], [ "Blue" ], [ "Alpha" ] ]
-              }
-            },
-            "configKey" : "FontColor"
+            "configPaths" : [ [ "Red" ], [ "Green" ], [ "Blue" ], [ "Alpha" ] ],
+            "route" : [ "FontColor" ]
           }
         }
       }

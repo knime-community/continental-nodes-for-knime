@@ -46,9 +46,11 @@
     
 package com.continental.knime.xlsformatter.borderformatter;
 
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 
+import org.knime.core.webui.node.dialog.defaultdialog.internal.widget.PersistWithin;
 import org.knime.node.parameters.NodeParametersInput;
 import org.knime.node.parameters.Widget;
 import org.knime.node.parameters.layout.After;
@@ -69,7 +71,7 @@ import org.knime.node.parameters.widget.text.TextInputWidget;
 import com.continental.knime.xlsformatter.porttype.XlsFormatterState.BorderStyle;
 import com.continental.knime.xlsformatter.util.PerformTagValidationParameter;
 import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil;
-import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil.LegacyColorNodeParameters;
+import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil.LegacyColorPersistor;
 import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil.UpperLowerCaseEnumFieldPersistor;
 
 /**
@@ -139,11 +141,13 @@ final class XlsFormatterBorderFormatterNodeParameters extends PerformTagValidati
     static final class ChangeColorRef implements BooleanReference {
     }
     
-    @Layout(BorderStyleAndColorSection.class)
+    @SuppressWarnings("restriction")
+	@Layout(BorderStyleAndColorSection.class)
     @Widget(title = "Border color", description = "Select the border color.")
-    @Persist(configKey = XlsFormatterBorderFormatterNodeModel.CFGKEY_BORDER_COLOR)
+    @PersistWithin(XlsFormatterBorderFormatterNodeModel.CFGKEY_BORDER_COLOR)
+    @Persistor(LegacyColorPersistor.class)
     @Effect(predicate = ChangeColorRef.class, type = EffectType.ENABLE)
-    LegacyColorNodeParameters m_borderColor = new LegacyColorNodeParameters();
+    Color m_borderColor = Color.BLACK;
     
     @Layout(OuterBorderSettingsSection.class)
     @Widget(title = "Top", description = """

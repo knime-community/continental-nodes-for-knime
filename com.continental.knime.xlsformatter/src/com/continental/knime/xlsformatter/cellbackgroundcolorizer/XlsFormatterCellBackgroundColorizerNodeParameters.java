@@ -46,13 +46,14 @@
     
 package com.continental.knime.xlsformatter.cellbackgroundcolorizer;
 
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.Modification;
+import org.knime.core.webui.node.dialog.defaultdialog.internal.widget.PersistWithin;
 import org.knime.node.parameters.NodeParametersInput;
 import org.knime.node.parameters.Widget;
 import org.knime.node.parameters.layout.After;
@@ -79,8 +80,7 @@ import com.continental.knime.xlsformatter.commons.XlsFormatterUiOptions;
 import com.continental.knime.xlsformatter.porttype.XlsFormatterState.FillPattern;
 import com.continental.knime.xlsformatter.util.PerformTagValidationParameter;
 import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil;
-import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil.LegacyColorNodeParameters;
-import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil.LegacyColorNodeParameters.LegacyColorModification;
+import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil.LegacyColorPersistor;
 import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil.UpperLowerCaseEnumFieldPersistor;
 
 /**
@@ -139,18 +139,11 @@ final class XlsFormatterCellBackgroundColorizerNodeParameters extends PerformTag
     }
 
     @Layout(BackgroundColorSection.class)
-    @Persist(configKey = XlsFormatterCellBackgroundColorizerNodeModel.CFGKEY_BACKGROUNDCOLOR)
+    @Widget(title = "Background color", description = "Select the background color.")
+    @PersistWithin(XlsFormatterCellBackgroundColorizerNodeModel.CFGKEY_BACKGROUNDCOLOR)
+    @Persistor(LegacyColorPersistor.class)
     @Effect(predicate = IsStandardTagsModeAndHasBackgroundColor.class, type = EffectType.ENABLE)
-    @Modification(BackgroundColorMod.class)
-    LegacyColorNodeParameters m_backgroundColor = new LegacyColorNodeParameters();
-
-    static final class BackgroundColorMod extends LegacyColorModification {
-
-		protected BackgroundColorMod() {
-			super("Background color");
-		}
-    	
-    }
+    Color m_backgroundColor = Color.BLACK;
     
     @Layout(PatternFillSection.class)
     @Widget(title = "Pattern fill", description = """
@@ -180,20 +173,13 @@ final class XlsFormatterCellBackgroundColorizerNodeParameters extends PerformTag
     }
 
     @Layout(PatternFillSection.class)
-    @Persist(configKey = XlsFormatterCellBackgroundColorizerNodeModel.CFGKEY_BACKGROUND_PATTERN_COLOR)
+    @Widget(title = "Pattern color", description = "Select the pattern color.")
+    @PersistWithin(XlsFormatterCellBackgroundColorizerNodeModel.CFGKEY_BACKGROUND_PATTERN_COLOR)
+    @Persistor(BackgroundPatternColorPersistor.class)
     @Effect(predicate = IsStandardTagsModeAndIsModifiedBackgroundPatternAndHasBackgroundColor.class, 
     	type = EffectType.ENABLE)
-    @Modification(BackgroundPatternColorMod.class)
-    LegacyColorNodeParameters m_backgroundPatternColor = new LegacyColorNodeParameters();
+    Color m_backgroundPatternColor = Color.YELLOW;
     
-    static final class BackgroundPatternColorMod extends LegacyColorModification {
-
-		protected BackgroundPatternColorMod() {
-			super("Pattern color");
-		}
-    	
-    }
-
     static final class TagValidationProvider extends XlsFormatterNodeParameterUtil.XlsTagValidationProvider {
     	
         protected TagValidationProvider() {
@@ -252,6 +238,14 @@ final class XlsFormatterCellBackgroundColorizerNodeParameters extends PerformTag
         
     }
 
+    static final class BackgroundPatternColorPersistor extends LegacyColorPersistor {
+    	
+    	BackgroundPatternColorPersistor() {
+			super(Color.YELLOW);
+		}
+    	
+    }
+    
     static final class PatternFillPersistor extends UpperLowerCaseEnumFieldPersistor<FillPattern> {
     	
         protected PatternFillPersistor() {

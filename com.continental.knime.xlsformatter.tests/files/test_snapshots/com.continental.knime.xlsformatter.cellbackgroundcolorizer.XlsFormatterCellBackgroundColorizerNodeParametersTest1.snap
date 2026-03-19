@@ -5,14 +5,10 @@
       "controlTableStyle" : "STANDARD_TAGS",
       "tag" : "header",
       "changeBackgroundColor" : true,
-      "backgroundColor" : {
-        "hexColorWithAlpha" : "#FFFF00"
-      },
+      "backgroundColor" : "#FFFF00",
       "backgroundPattern" : "UNMODIFIED",
       "changeBackgroundPatternColor" : false,
-      "backgroundPatternColor" : {
-        "hexColorWithAlpha" : "#000000"
-      }
+      "backgroundPatternColor" : "#000000"
     }
   },
   "schema" : {
@@ -22,18 +18,10 @@
         "type" : "object",
         "properties" : {
           "backgroundColor" : {
-            "type" : "object",
-            "properties" : {
-              "hexColorWithAlpha" : {
-                "type" : "string",
-                "title" : "Background color",
-                "description" : "Choose a color in hex format with optional alpha channel.",
-                "default" : "#000000FF"
-              }
-            },
-            "default" : {
-              "hexColorWithAlpha" : "#000000FF"
-            }
+            "type" : "string",
+            "title" : "Background color",
+            "description" : "Select the background color.",
+            "default" : "#000000"
           },
           "backgroundPattern" : {
             "oneOf" : [ {
@@ -63,18 +51,10 @@
             "default" : "UNMODIFIED"
           },
           "backgroundPatternColor" : {
-            "type" : "object",
-            "properties" : {
-              "hexColorWithAlpha" : {
-                "type" : "string",
-                "title" : "Pattern color",
-                "description" : "Choose a color in hex format with optional alpha channel.",
-                "default" : "#000000FF"
-              }
-            },
-            "default" : {
-              "hexColorWithAlpha" : "#000000FF"
-            }
+            "type" : "string",
+            "title" : "Pattern color",
+            "description" : "Select the pattern color.",
+            "default" : "#FFFF00"
           },
           "changeBackgroundColor" : {
             "type" : "boolean",
@@ -159,16 +139,9 @@
         }
       }, {
         "type" : "Control",
-        "scope" : "#/properties/model/properties/backgroundColor/properties/hexColorWithAlpha",
+        "scope" : "#/properties/model/properties/backgroundColor",
         "options" : {
-          "validation" : {
-            "pattern" : {
-              "errorMessage" : "Invalid color format. Please provide a hex color in the format #RRGGBB or #RRGGBBAA.",
-              "parameters" : {
-                "pattern" : "^#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
-              }
-            }
-          }
+          "format" : "color"
         },
         "rule" : {
           "effect" : "ENABLE",
@@ -242,16 +215,9 @@
         }
       }, {
         "type" : "Control",
-        "scope" : "#/properties/model/properties/backgroundPatternColor/properties/hexColorWithAlpha",
+        "scope" : "#/properties/model/properties/backgroundPatternColor",
         "options" : {
-          "validation" : {
-            "pattern" : {
-              "errorMessage" : "Invalid color format. Please provide a hex color in the format #RRGGBB or #RRGGBBAA.",
-              "parameters" : {
-                "pattern" : "^#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
-              }
-            }
-          }
+          "format" : "color"
         },
         "rule" : {
           "effect" : "ENABLE",
@@ -308,13 +274,8 @@
             "configKey" : "BackGroundColorSelection"
           },
           "backgroundColor" : {
-            "type" : "object",
-            "properties" : {
-              "hexColorWithAlpha" : {
-                "configPaths" : [ [ "Red" ], [ "Green" ], [ "Blue" ], [ "Alpha" ] ]
-              }
-            },
-            "configKey" : "BackGroundColor"
+            "configPaths" : [ [ "Red" ], [ "Green" ], [ "Blue" ], [ "Alpha" ] ],
+            "route" : [ "BackGroundColor" ]
           },
           "backgroundPattern" : {
             "configPaths" : [ [ "BackGroundPatternSelection" ] ]
@@ -323,13 +284,8 @@
             "configKey" : "BackGroundPatternColorSelection"
           },
           "backgroundPatternColor" : {
-            "type" : "object",
-            "properties" : {
-              "hexColorWithAlpha" : {
-                "configPaths" : [ [ "Red" ], [ "Green" ], [ "Blue" ], [ "Alpha" ] ]
-              }
-            },
-            "configKey" : "BackGroundPatternColor"
+            "configPaths" : [ [ "Red" ], [ "Green" ], [ "Blue" ], [ "Alpha" ] ],
+            "route" : [ "BackGroundPatternColor" ]
           }
         }
       }

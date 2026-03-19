@@ -46,11 +46,15 @@
     
 package com.continental.knime.xlsformatter.fontformatter;
 
+import java.awt.Color;
+
+import org.knime.core.webui.node.dialog.defaultdialog.internal.widget.PersistWithin;
 import org.knime.node.parameters.Widget;
 import org.knime.node.parameters.layout.Layout;
 import org.knime.node.parameters.layout.Section;
 import org.knime.node.parameters.migration.LoadDefaultsForAbsentFields;
 import org.knime.node.parameters.persistence.Persist;
+import org.knime.node.parameters.persistence.Persistor;
 import org.knime.node.parameters.updates.Effect;
 import org.knime.node.parameters.updates.Effect.EffectType;
 import org.knime.node.parameters.updates.ParameterReference;
@@ -62,7 +66,7 @@ import org.knime.node.parameters.widget.text.TextInputWidget;
 
 import com.continental.knime.xlsformatter.util.PerformTagValidationParameter;
 import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil;
-import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil.LegacyColorNodeParameters;
+import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil.LegacyColorPersistor;
 
 /**
  * Node parameters for XLS Font Formatter.
@@ -132,10 +136,13 @@ final class XlsFormatterFontFormatterNodeParameters extends PerformTagValidation
     static final class ChangeColorRef implements BooleanReference {
     }
 
-    @Layout(FontSpecificationSection.class)
-    @Persist(configKey = XlsFormatterFontFormatterNodeModel.CFGKEY_FONTCOLOR)
+    @SuppressWarnings("restriction")
+	@Layout(FontSpecificationSection.class)
+	@Widget(title = "Color", description = "Define a color assigned to the font.")
+    @PersistWithin(XlsFormatterFontFormatterNodeModel.CFGKEY_FONTCOLOR)
+    @Persistor(LegacyColorPersistor.class)
     @Effect(predicate = ChangeColorRef.class, type = EffectType.ENABLE)
-    LegacyColorNodeParameters m_fontColor = new LegacyColorNodeParameters();
+    Color m_fontColor = Color.BLACK;
 
     static final class TagValidationProvider extends XlsFormatterNodeParameterUtil.XlsTagValidationProvider {
     	

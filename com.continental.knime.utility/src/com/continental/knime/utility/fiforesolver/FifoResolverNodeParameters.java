@@ -56,8 +56,8 @@ import org.knime.core.data.StringValue;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-import org.knime.core.webui.node.dialog.defaultdialog.internal.widget.PersistWithin;
-import org.knime.core.webui.node.dialog.defaultdialog.util.updates.StateComputationFailureException;
+import org.knime.node.parameters.legacy.persistence.PersistWithin;
+import org.knime.node.parameters.updates.StateComputationAbortException;
 import org.knime.node.parameters.NodeParameters;
 import org.knime.node.parameters.NodeParametersInput;
 import org.knime.node.parameters.Widget;
@@ -68,7 +68,7 @@ import org.knime.node.parameters.persistence.Persistor;
 import org.knime.node.parameters.updates.ParameterReference;
 import org.knime.node.parameters.updates.ValueProvider;
 import org.knime.node.parameters.updates.ValueReference;
-import org.knime.node.parameters.updates.legacy.AutoGuessValueProvider;
+import org.knime.node.parameters.legacy.updates.AutoGuessValueProvider;
 import org.knime.node.parameters.widget.choices.ChoicesProvider;
 import org.knime.node.parameters.widget.choices.Label;
 import org.knime.node.parameters.widget.choices.ValueSwitchWidget;
@@ -146,7 +146,7 @@ class FifoResolverNodeParameters implements NodeParameters {
 
 		@Override
 		protected String autoGuessValue(NodeParametersInput parametersInput)
-				throws StateComputationFailureException {
+				throws StateComputationAbortException {
 			return ColumnSelectionUtil.getFirstCompatibleColumnOfFirstPort(parametersInput, StringValue.class)
 					.map(DataColumnSpec::getName)
 					.orElse(null);
@@ -168,7 +168,7 @@ class FifoResolverNodeParameters implements NodeParameters {
 
 		@Override
 		protected String autoGuessValue(NodeParametersInput parametersInput)
-				throws StateComputationFailureException {
+				throws StateComputationAbortException {
 			return ColumnSelectionUtil.getFirstCompatibleColumnOfFirstPort(parametersInput, DoubleValue.class)
 					.map(DataColumnSpec::getName)
 					.orElse(null);

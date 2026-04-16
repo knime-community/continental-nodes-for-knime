@@ -68,8 +68,7 @@ import org.knime.node.parameters.updates.ValueReference;
 import org.knime.node.parameters.widget.choices.ChoicesProvider;
 import org.knime.node.parameters.widget.choices.EnumChoicesProvider;
 import org.knime.node.parameters.widget.choices.Label;
-import org.knime.node.parameters.widget.choices.StringChoicesProvider;
-import org.knime.node.parameters.widget.choices.SuggestionsProvider;
+import org.knime.node.parameters.widget.choices.SuggestionsStateProvider;
 import org.knime.node.parameters.widget.text.TextInputWidget;
 
 import com.continental.knime.xlsformatter.cellformatter.XlsFormatterCellFormatterNodeModel.TextPresets;
@@ -155,7 +154,7 @@ final class XlsFormatterCellFormatterNodeParameters extends PerformTagValidation
 			English locale values, irrespective of your target or local environment.
 			""")
 	@Persist(configKey = XlsFormatterCellFormatterNodeModel.CFGKEY_TEXT_FORMAT)
-	@SuggestionsProvider(TextFormatSuggestionProvider.class)
+	@TextInputWidget(suggestionsProvider = TextFormatSuggestionProvider.class)
 	String textFormat = XlsFormatterCellFormatterNodeModel.DEFAULT_TEXT_FORMAT;
 	
 	@Persistor(TextPresetsPersistor.class)
@@ -178,10 +177,10 @@ final class XlsFormatterCellFormatterNodeParameters extends PerformTagValidation
 		
 	}
 	
-	static final class TextFormatSuggestionProvider implements StringChoicesProvider {
+	static final class TextFormatSuggestionProvider implements SuggestionsStateProvider {
 
 		@Override
-		public List<String> choices(NodeParametersInput context) {
+		public List<String> computeState(NodeParametersInput context) {
 			return Arrays.stream(TextPresets.values()).map(preset -> preset.getTextFormat()).toList();
 		}
 

@@ -48,7 +48,7 @@ package com.continental.knime.xlsformatter.fontformatter;
 
 import java.awt.Color;
 
-import org.knime.core.webui.node.dialog.defaultdialog.internal.widget.PersistWithin;
+import org.knime.node.parameters.legacy.persistence.PersistWithin;
 import org.knime.node.parameters.Widget;
 import org.knime.node.parameters.layout.Layout;
 import org.knime.node.parameters.layout.Section;

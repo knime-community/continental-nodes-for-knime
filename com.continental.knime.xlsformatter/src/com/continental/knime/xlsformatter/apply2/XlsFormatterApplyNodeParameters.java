@@ -49,16 +49,16 @@ package com.continental.knime.xlsformatter.apply2;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.knime.core.webui.node.dialog.defaultdialog.internal.file.FileReaderWidget;
-import org.knime.core.webui.node.dialog.defaultdialog.internal.file.FileSelectionWidget;
-import org.knime.core.webui.node.dialog.defaultdialog.internal.file.FileSystemOption;
-import org.knime.core.webui.node.dialog.defaultdialog.internal.file.FileWriterWidget;
-import org.knime.core.webui.node.dialog.defaultdialog.internal.file.SingleFileSelectionMode;
-import org.knime.core.webui.node.dialog.defaultdialog.internal.file.WithFileSystem;
-import org.knime.core.webui.node.dialog.defaultdialog.persistence.booleanhelpers.DoNotPersistBoolean;
-import org.knime.core.webui.node.dialog.defaultdialog.util.updates.StateComputationFailureException;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.Modification;
-import org.knime.core.webui.node.dialog.defaultdialog.widget.Modification.WidgetGroupModifier;
+import org.knime.node.parameters.widget.file.FileReaderWidget;
+import org.knime.node.parameters.widget.file.FileSelectionWidget;
+import org.knime.node.parameters.widget.file.FileSystemOption;
+import org.knime.node.parameters.widget.file.FileWriterWidget;
+import org.knime.node.parameters.widget.file.SingleFileSelectionMode;
+import org.knime.node.parameters.widget.file.WithFileSystem;
+import org.knime.node.parameters.experimental.persistence.booleanhelpers.DoNotPersistBoolean;
+import org.knime.node.parameters.updates.StateComputationAbortException;
+import org.knime.node.parameters.modification.Modification;
+import org.knime.node.parameters.modification.Modification.WidgetGroupModifier;
 import org.knime.node.parameters.Advanced;
 import org.knime.node.parameters.NodeParameters;
 import org.knime.node.parameters.NodeParametersInput;
@@ -71,10 +71,10 @@ import org.knime.node.parameters.migration.LoadDefaultsForAbsentFields;
 import org.knime.node.parameters.migration.Migration;
 import org.knime.node.parameters.persistence.Persist;
 import org.knime.node.parameters.persistence.Persistor;
-import org.knime.node.parameters.persistence.legacy.LegacyFileWriter;
-import org.knime.node.parameters.persistence.legacy.LegacyFileWriterWithOverwritePolicyOptions;
-import org.knime.node.parameters.persistence.legacy.LegacyFileWriterWithOverwritePolicyOptions.OverwritePolicy;
-import org.knime.node.parameters.persistence.legacy.LegacyFileWriterWithOverwritePolicyOptions.OverwritePolicyChoicesProvider;
+import org.knime.node.parameters.legacy.widget.file.LegacyFileWriter;
+import org.knime.node.parameters.legacy.widget.file.LegacyFileWriterWithOverwritePolicyOptions;
+import org.knime.node.parameters.legacy.widget.file.LegacyFileWriterWithOverwritePolicyOptions.OverwritePolicy;
+import org.knime.node.parameters.legacy.widget.file.LegacyFileWriterWithOverwritePolicyOptions.OverwritePolicyChoicesProvider;
 import org.knime.node.parameters.updates.Effect;
 import org.knime.node.parameters.updates.Effect.EffectType;
 import org.knime.node.parameters.updates.EffectPredicate;
@@ -235,7 +235,7 @@ final class XlsFormatterApplyNodeParameters implements NodeParameters {
 		}
 
 		@Override
-		public Boolean computeState(NodeParametersInput parametersInput) throws StateComputationFailureException {
+		public Boolean computeState(NodeParametersInput parametersInput) throws StateComputationAbortException {
 			final var destinationFile = m_destinationFileSupplier.get();
 			if (destinationFile == null) {
 				return false;

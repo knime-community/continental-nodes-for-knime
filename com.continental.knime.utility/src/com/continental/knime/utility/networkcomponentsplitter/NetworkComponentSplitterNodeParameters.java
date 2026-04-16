@@ -50,8 +50,8 @@ import org.knime.core.data.StringValue;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-import org.knime.core.webui.node.dialog.defaultdialog.internal.widget.PersistWithin;
-import org.knime.core.webui.node.dialog.defaultdialog.util.updates.StateComputationFailureException;
+import org.knime.node.parameters.legacy.persistence.PersistWithin;
+import org.knime.node.parameters.updates.StateComputationAbortException;
 import org.knime.node.parameters.NodeParameters;
 import org.knime.node.parameters.NodeParametersInput;
 import org.knime.node.parameters.Widget;
@@ -184,24 +184,24 @@ final class NetworkComponentSplitterNodeParameters implements NodeParameters {
 		}
 
 		@Override
-		public String computeState(NodeParametersInput parametersInput) throws StateComputationFailureException {
+		public String computeState(NodeParametersInput parametersInput) throws StateComputationAbortException {
             final var currentValue = m_inputColumn1Supplier.get();
 			if (currentValue != null && !currentValue.isEmpty()) {
 				if (currentValue.equals(NetworkComponentSplitterNodeModel.DEFAULT_COLUMN_NAME1)) {
 					return null;
 				}
-				throw new StateComputationFailureException();
+				throw new StateComputationAbortException();
 			}
 			
 			var tableSpecOpt = parametersInput.getInTableSpec(0);
             if (tableSpecOpt.isEmpty()) {
-                throw new StateComputationFailureException();
+                throw new StateComputationAbortException();
             }
             return tableSpecOpt.get().stream() //
                 .filter(colSpec -> colSpec.getType().isCompatible(StringValue.class)) //
                 .findFirst() //
                 .map(colSpec -> colSpec.getName()) //
-                .orElseThrow(StateComputationFailureException::new);
+                .orElseThrow(StateComputationAbortException::new);
 		}
         
     }
@@ -217,25 +217,25 @@ final class NetworkComponentSplitterNodeParameters implements NodeParameters {
 		}
 
 		@Override
-		public String computeState(NodeParametersInput parametersInput) throws StateComputationFailureException {
+		public String computeState(NodeParametersInput parametersInput) throws StateComputationAbortException {
             final var currentValue = m_inputColumn2Supplier.get();
 			if (currentValue != null && !currentValue.isEmpty()) {
 				if (currentValue.equals(NetworkComponentSplitterNodeModel.DEFAULT_COLUMN_NAME2)) {
 					return null;
 				}
-				throw new StateComputationFailureException();
+				throw new StateComputationAbortException();
 			}
 			
             var tableSpecOpt = parametersInput.getInTableSpec(0);
             if (tableSpecOpt.isEmpty()) {
-                throw new StateComputationFailureException();
+                throw new StateComputationAbortException();
             }
             final var compatibleChoices = tableSpecOpt.get().stream() //
                 .filter(colSpec -> colSpec.getType().isCompatible(StringValue.class)) //
                 .map(colSpec -> colSpec.getName()) //
                 .toList();
             if (compatibleChoices.size() == 0) {
-				throw new StateComputationFailureException();
+				throw new StateComputationAbortException();
 			} else if (compatibleChoices.size() == 1) {
 				return compatibleChoices.get(0);
 			} else {

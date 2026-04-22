@@ -34,7 +34,7 @@
 		<repository>
 			<id>p2-knime-update-site</id>
 			<layout>p2</layout>
-			<url>https://jenkins.devops.knime.com/p2/knime/composites/master</url>
+			<url>https://update.knime.com/analytics-platform/${knime.version}</url>
 		</repository>
 	</repositories>
 

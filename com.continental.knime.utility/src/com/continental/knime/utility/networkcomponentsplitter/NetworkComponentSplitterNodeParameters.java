@@ -96,7 +96,6 @@ import static com.continental.knime.utility.networkcomponentsplitter.NetworkComp
  * @author AI Migration Pipeline v1.2
  */
 @LoadDefaultsForAbsentFields
-@SuppressWarnings("restriction")
 final class NetworkComponentSplitterNodeParameters implements NodeParameters {
     
 	@Section(title = "Missing Value Handling")

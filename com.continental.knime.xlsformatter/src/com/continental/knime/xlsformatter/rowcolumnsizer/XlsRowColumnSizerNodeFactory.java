@@ -26,19 +26,14 @@ import org.knime.core.webui.node.dialog.NodeDialogFactory;
 import org.knime.core.webui.node.dialog.NodeDialogManager;
 import org.knime.core.webui.node.dialog.SettingsType;
 import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
-import org.knime.core.webui.node.dialog.defaultdialog.DefaultKaiNodeInterface;
-import org.knime.core.webui.node.dialog.kai.KaiNodeInterface;
-import org.knime.core.webui.node.dialog.kai.KaiNodeInterfaceFactory;
 import org.knime.core.node.NodeDescription;
 import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
-import java.util.Map;
 import org.knime.node.impl.description.PortDescription;
 import java.util.List;
 import static org.knime.node.impl.description.PortDescription.fixedPort;
 
-@SuppressWarnings("restriction")
 public class XlsRowColumnSizerNodeFactory extends NodeFactory<XlsRowColumnSizerNodeModel> 
-	implements NodeDialogFactory, KaiNodeInterfaceFactory {
+	implements NodeDialogFactory {
 
 	@Override
 	public XlsRowColumnSizerNodeModel createNodeModel() {
@@ -131,12 +126,4 @@ public class XlsRowColumnSizerNodeFactory extends NodeFactory<XlsRowColumnSizerN
         );
     }
 
-    /**
-     * {@inheritDoc}
-     * @since 1.7
-     */
-    @Override
-    public KaiNodeInterface createKaiNodeInterface() {
-        return new DefaultKaiNodeInterface(Map.of(SettingsType.MODEL, XlsRowColumnSizerNodeParameters.class));
-    }
 }

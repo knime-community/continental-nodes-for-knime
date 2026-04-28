@@ -69,7 +69,6 @@ import org.knime.node.parameters.widget.text.TextInputWidgetValidation.PatternVa
  * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
  * @author AI Migration Pipeline v1.2
  */
-@SuppressWarnings("restriction")
 @LoadDefaultsForAbsentFields
 final class XlsSheetSelectorNodeParameters implements NodeParameters {
     

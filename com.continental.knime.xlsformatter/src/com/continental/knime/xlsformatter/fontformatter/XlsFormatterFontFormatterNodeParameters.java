@@ -136,8 +136,7 @@ final class XlsFormatterFontFormatterNodeParameters extends PerformTagValidation
     static final class ChangeColorRef implements BooleanReference {
     }
 
-    @SuppressWarnings("restriction")
-	@Layout(FontSpecificationSection.class)
+    @Layout(FontSpecificationSection.class)
 	@Widget(title = "Color", description = "Define a color assigned to the font.")
     @PersistWithin(XlsFormatterFontFormatterNodeModel.CFGKEY_FONTCOLOR)
     @Persistor(LegacyColorPersistor.class)

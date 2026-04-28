@@ -81,7 +81,6 @@ import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil.Leg
  * @author AI Migration Pipeline v1.2
  */
 @LoadDefaultsForAbsentFields
-@SuppressWarnings("restriction")
 final class XlsFormatterConditionalFormatterNodeParameters extends PerformTagValidationParameter {
     
     @Section(title = "Conditional Formatting Settings")

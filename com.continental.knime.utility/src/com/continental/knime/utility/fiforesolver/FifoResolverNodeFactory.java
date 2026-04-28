@@ -19,8 +19,6 @@
 package com.continental.knime.utility.fiforesolver;
 
 import java.util.List;
-import java.util.Map;
-
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
@@ -29,17 +27,13 @@ import org.knime.core.webui.node.dialog.NodeDialogFactory;
 import org.knime.core.webui.node.dialog.NodeDialogManager;
 import org.knime.core.webui.node.dialog.SettingsType;
 import org.knime.core.webui.node.dialog.defaultdialog.DefaultNodeDialog;
-import org.knime.core.webui.node.dialog.defaultdialog.DefaultKaiNodeInterface;
-import org.knime.core.webui.node.dialog.kai.KaiNodeInterface;
-import org.knime.core.webui.node.dialog.kai.KaiNodeInterfaceFactory;
 import org.knime.core.node.NodeDescription;
 import org.knime.node.impl.description.DefaultNodeDescriptionUtil;
 import org.knime.node.impl.description.PortDescription;
 import static org.knime.node.impl.description.PortDescription.fixedPort;
 
-@SuppressWarnings("restriction")
 public class FifoResolverNodeFactory 
-extends NodeFactory<FifoResolverNodeModel> implements NodeDialogFactory, KaiNodeInterfaceFactory {
+extends NodeFactory<FifoResolverNodeModel> implements NodeDialogFactory {
 
 	@Override
 	public FifoResolverNodeModel createNodeModel() {
@@ -141,13 +135,5 @@ extends NodeFactory<FifoResolverNodeModel> implements NodeDialogFactory, KaiNode
         );
     }
 
-    /**
-     * {@inheritDoc}
-	 * @since 1.7
-     */
-    @Override
-    public KaiNodeInterface createKaiNodeInterface() {
-        return new DefaultKaiNodeInterface(Map.of(SettingsType.MODEL, FifoResolverNodeParameters.class));
-    }
     
 }

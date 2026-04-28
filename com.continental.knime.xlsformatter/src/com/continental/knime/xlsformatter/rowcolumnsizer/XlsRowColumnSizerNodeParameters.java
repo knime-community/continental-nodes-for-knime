@@ -86,7 +86,6 @@ import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil;
  * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
  * @author AI Migration Pipeline v1.2
  */
-@SuppressWarnings("restriction")
 @LoadDefaultsForAbsentFields
 final class XlsRowColumnSizerNodeParameters extends PerformTagValidationParameter {
     

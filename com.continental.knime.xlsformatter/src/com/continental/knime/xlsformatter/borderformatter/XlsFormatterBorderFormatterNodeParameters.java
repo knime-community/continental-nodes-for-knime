@@ -141,8 +141,7 @@ final class XlsFormatterBorderFormatterNodeParameters extends PerformTagValidati
     static final class ChangeColorRef implements BooleanReference {
     }
     
-    @SuppressWarnings("restriction")
-	@Layout(BorderStyleAndColorSection.class)
+    @Layout(BorderStyleAndColorSection.class)
     @Widget(title = "Border color", description = "Select the border color.")
     @PersistWithin(XlsFormatterBorderFormatterNodeModel.CFGKEY_BORDER_COLOR)
     @Persistor(LegacyColorPersistor.class)

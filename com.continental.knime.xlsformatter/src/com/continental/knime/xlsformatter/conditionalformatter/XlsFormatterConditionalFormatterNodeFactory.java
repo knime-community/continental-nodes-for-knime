@@ -33,7 +33,6 @@ import org.knime.node.impl.description.PortDescription;
 import java.util.List;
 import static org.knime.node.impl.description.PortDescription.fixedPort;
 
-@SuppressWarnings("restriction")
 public class XlsFormatterConditionalFormatterNodeFactory extends NodeFactory<XlsFormatterConditionalFormatterNodeModel> 
 implements NodeDialogFactory {
 

@@ -85,7 +85,6 @@ import com.continental.knime.utility.NodeParameterUtil.LegacyColumnNamePersistor
  * @author AI Migration Pipeline v1.2
  */
 @LoadDefaultsForAbsentFields
-@SuppressWarnings("restriction")
 class FifoResolverNodeParameters implements NodeParameters {
     
     @Widget(title = "Queue resolution mode", description = """

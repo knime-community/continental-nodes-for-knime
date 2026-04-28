@@ -90,7 +90,6 @@ import com.continental.knime.xlsformatter.util.XlsFormatterNodeParameterUtil.Upp
  * @author AI Migration Pipeline v1.2
  */
 @LoadDefaultsForAbsentFields
-@SuppressWarnings("restriction")
 final class XlsFormatterCellBackgroundColorizerNodeParameters extends PerformTagValidationParameter {
     
     @Section(title = "Background Color")

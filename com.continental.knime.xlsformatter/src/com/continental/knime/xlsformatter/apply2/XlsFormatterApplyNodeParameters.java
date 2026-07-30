@@ -55,10 +55,12 @@ import org.knime.node.parameters.widget.file.FileSystemOption;
 import org.knime.node.parameters.widget.file.FileWriterWidget;
 import org.knime.node.parameters.widget.file.SingleFileSelectionMode;
 import org.knime.node.parameters.widget.file.WithFileSystem;
-import org.knime.node.parameters.experimental.persistence.booleanhelpers.DoNotPersistBoolean;
 import org.knime.node.parameters.updates.StateComputationAbortException;
 import org.knime.node.parameters.modification.Modification;
 import org.knime.node.parameters.modification.Modification.WidgetGroupModifier;
+import org.knime.core.node.InvalidSettingsException;
+import org.knime.core.node.NodeSettingsRO;
+import org.knime.core.node.NodeSettingsWO;
 import org.knime.node.parameters.Advanced;
 import org.knime.node.parameters.NodeParameters;
 import org.knime.node.parameters.NodeParametersInput;
@@ -69,6 +71,7 @@ import org.knime.node.parameters.layout.Section;
 import org.knime.node.parameters.migration.DefaultProvider;
 import org.knime.node.parameters.migration.LoadDefaultsForAbsentFields;
 import org.knime.node.parameters.migration.Migration;
+import org.knime.node.parameters.persistence.NodeParametersPersistor;
 import org.knime.node.parameters.persistence.Persist;
 import org.knime.node.parameters.persistence.Persistor;
 import org.knime.node.parameters.legacy.widget.file.LegacyFileWriter;
@@ -77,8 +80,6 @@ import org.knime.node.parameters.legacy.widget.file.LegacyFileWriterWithOverwrit
 import org.knime.node.parameters.legacy.widget.file.LegacyFileWriterWithOverwritePolicyOptions.OverwritePolicyChoicesProvider;
 import org.knime.node.parameters.updates.Effect;
 import org.knime.node.parameters.updates.Effect.EffectType;
-import org.knime.node.parameters.updates.EffectPredicate;
-import org.knime.node.parameters.updates.EffectPredicateProvider;
 import org.knime.node.parameters.updates.ParameterReference;
 import org.knime.node.parameters.updates.StateProvider;
 import org.knime.node.parameters.updates.ValueProvider;
@@ -91,7 +92,7 @@ import org.knime.node.parameters.updates.util.BooleanReference;
  * @author Magnus Gohm, KNIME GmbH, Konstanz, Germany
  * @author AI Migration Pipeline v1.2
  */
-@SuppressWarnings("restriction")
+
 @LoadDefaultsForAbsentFields
 final class XlsFormatterApplyNodeParameters implements NodeParameters {
 
@@ -220,6 +221,26 @@ final class XlsFormatterApplyNodeParameters implements NodeParameters {
     @ValueProvider(IsOpenOutputFileEnabledProvider.class)
     @ValueReference(IsOpenOutputFileEnabled.class)
     boolean m_isOpenOutputFileEnabled;
+    
+    static class DoNotPersistBoolean implements NodeParametersPersistor<Boolean> {
+
+        @Override
+        public Boolean load(final NodeSettingsRO settings) throws InvalidSettingsException {
+            return false;
+        }
+
+        @Override
+        public void save(final Boolean obj, final NodeSettingsWO settings) {
+            // do nothing
+        }
+
+        @Override
+        public String[][] getConfigPaths() {
+            return new String[0][0];
+        }
+
+    }
+    
     
     static final class IsOpenOutputFileEnabled implements BooleanReference {
     }
